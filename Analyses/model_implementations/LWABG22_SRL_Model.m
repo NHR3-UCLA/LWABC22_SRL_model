@@ -1,5 +1,5 @@
 function [srl, srl_med, tau_srl] = LWABG22_SRL_Model(mag, wrup_max, F_D, eps)
-%Lavrentiadis, Wang,  Abrahamson, Bozorgnia, and Goulet (2022)
+% Lavrentiadis, Wang,  Abrahamson, Bozorgnia, and Goulet (2022)
 % Surface Rupture Lenght model
 
 %Model coefficinets
@@ -8,10 +8,10 @@ function [srl, srl_med, tau_srl] = LWABG22_SRL_Model(mag, wrup_max, F_D, eps)
 b_1=-1.1602; 
 b_2= 0.0325;
 %srl model
-c_1   =-3.7564;
-c_2   = 0.9282;
-c_3   =-0.1292;
-tau_u = 0.2706
+c_1   =-3.6913;
+c_2   = 0.9205;
+c_3   =-0.1567;
+tau_u = 0.2568;
 
 %Default inputs
 %--------------------

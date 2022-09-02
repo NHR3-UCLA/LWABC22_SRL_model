@@ -216,9 +216,12 @@ pl_data_len_mag <- ggplot() + geom_point(data=df_FDHI_srl, aes(x=magnitude, even
 
 #srl vs mag FDHI
 pl_data_FDHI_SCEC_cmp <- ggplot() + geom_point(data=df_FDHI_srl, aes(x=magnitude, event_len, 
-                                                                     shape=as.factor('Empirical'), color=as.factor('Empirical'), size=as.factor('Empirical'))) +
+                                                                     shape=as.factor('Empirical'), color=as.factor('Empirical'),
+                                                                     size=as.factor('Empirical'))) +
                                     geom_point(data=df_SCEC_srl, aes(x=magnitude, rup_srl_wide, 
-                                                                     shape=as.factor('SCEC'),      color=as.factor('SCEC'),      size=as.factor('SCEC'))) +
+                                                                     shape=as.factor('SCEC -\nSimulations'),
+                                                                     color=as.factor('SCEC -\nSimulations'),
+                                                                     size=as.factor('SCEC -\nSimulations'))) +
                                     scale_shape_manual(values=c(19,15,17))+
                                     scale_color_manual(values=color_emp_sim) +
                                     scale_size_manual(values = c(2.2,1.6)) +
@@ -234,7 +237,7 @@ pl_data_FDHI_SCEC_cmp <- ggplot() + geom_point(data=df_FDHI_srl, aes(x=magnitude
 
 #save figures
 ggsave(file.path(dir_fig,'data_srl_mag_FDHI.png'),      plot=pl_data_len_mag,       device='png', width=6.6, height=4)
-ggsave(file.path(dir_fig,'data_srl_mag_FDHI-SCEC.png'), plot=pl_data_FDHI_SCEC_cmp, device='png', width=5.7, height=4)
+ggsave(file.path(dir_fig,'data_srl_mag_FDHI-SCEC.png'), plot=pl_data_FDHI_SCEC_cmp, device='png', width=6.3, height=4)
 ```
 
 Summary statistics of the empirical dataset are presented below:

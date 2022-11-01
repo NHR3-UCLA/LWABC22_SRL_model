@@ -14,6 +14,7 @@ author: |
 output: html_document
 ---
 
+```{=html}
 <style type="text/css">
 
 h1.title {
@@ -21,7 +22,7 @@ h1.title {
 }
 
 </style>
-
+```
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
@@ -56,13 +57,14 @@ breaks_log_minor <- rep(1:9, 21)*(10^rep(-10:10, each=9))
 theme_set(theme_linedraw())
 ```
 
-## Introduction 
+## Introduction
+
 This study presents a new $SRL$ model with physically defensible scaling for unbounded and width-limited ruptures.
 
 Study Objectives:
 
-* Consistent scaling with seismological theory
-* Captures scaling for width-limited ruptures
+-   Consistent scaling with seismological theory
+-   Captures scaling for width-limited ruptures
 
 ## Load Data
 
@@ -86,14 +88,18 @@ dir_fig <- file.path(dir_out, 'figures/')
 size_title <- 13
 size_text  <- 12
 
+#example width and dip angles
+examp_seis     <- 15
+examp_seis_alt <- 20
+examp_dip      <- 90
+examp_dip_alt  <- 45
+
 #create output directories
 dir.create(dir_out, showWarnings = FALSE)
 dir.create(dir_fig, showWarnings = FALSE)
 ```
 
-The empirical data that are used in model development include the FDHI (Sarmiento et al. 2021), Wells and Coppersmith (1994), and Baize et al. (2020) datasets. 
-The surface rupture lengths ($SRL$) of the events in FDHI dataset are computed based on the Event Coordinate System (ECS), while the $SRL$ in Wells and Coppersmith (1994) and Baize et al. (2020) are reported directly. 
-Additionally, dynamic rupture simulations performed by SCEC are used to derive the rupture width model for the width-limited ruptures. 
+The empirical data that are used in model development include the FDHI (Sarmiento et al. 2021), Wells and Coppersmith (1994), and Baize et al. (2020) datasets. The surface rupture lengths ($SRL$) of the events in FDHI dataset are computed based on the Event Coordinate System (ECS), while the $SRL$ in Wells and Coppersmith (1994) and Baize et al. (2020) are reported directly. Additionally, dynamic rupture simulations performed by SCEC are used to derive the rupture width model for the width-limited ruptures.
 
 ```{r load_data}
 #read srl flatfiles
@@ -139,13 +145,9 @@ rm(list=c('df_SCEC_srl_original','df_SCEC_srl_low_width','df_SCEC_srl_const_sig'
           'df_SCEC_srl_sim_2', 'df_SCEC_srl_sim_3', 'df_SCEC_srl_sim_4'))
 ```
 
-The maximum fault width of the empirical data was calculated based on the thickness of the seismogenic zone ($D_{seis}$) and fault dip angle ($\theta$).
-Table 1 summarizes $D_{seis}$ based on the fault location and Table 2 summarizes $\theta$ for different styles of faulting. 
-$$
+The maximum fault width of the empirical data was calculated based on the thickness of the seismogenic zone ($D_{seis}$) and fault dip angle ($\theta$). Table 1 summarizes $D_{seis}$ based on the fault location and Table 2 summarizes $\theta$ for different styles of faulting. $$
   W_{lim} = \frac{D_{seis}}{\sin(\theta)}
-$$
-$W_{lim}$ is the maximum width a rupture can reach before it becomes width limited. 
-
+$$ $W_{lim}$ is the maximum width, a rupture can reach before it becomes width limited.
 
 ```{r, tab1, echo=FALSE}
 df <- data.frame(regions = c("California", "Guatemala", "New Zealand", "Indonesia", "Japan", "Himalayan Region", "Australia","Other"),
@@ -161,15 +163,14 @@ kable(df, col.names = c("Style of Fauling", "Dip Angle (deg)"),  caption = "Tabl
   kable_styling(latex_options = "hold_position")
 ```
 
-
 ### Outliers
 
 The following events were excluded from the regression dataset:
 
-* Events less than $\mathbf{M}~5$
-* 1892 Laguna Salada: it was occurred in 1892 but mapped in the 2010s. Magnitude is estimated.
-* 1978 IzuOshima: surface is incomplete, rupture probably extended offshore to southeast; epicenter is offshore ~17 km
-* 1993 Killari: it occurred in a stable continental region; probably a lot of deformation accommodated via folding/warping that was unmapped
+-   Events less than $\mathbf{M}~5$
+-   1892 Laguna Salada: it was occurred in 1892 but mapped in the 2010s. Magnitude is estimated.
+-   1978 IzuOshima: surface is incomplete, rupture probably extended offshore to southeast; epicenter is offshore \~17 km
+-   1993 Killari: it occurred in a stable continental region; probably a lot of deformation accommodated via folding/warping that was unmapped
 
 ```{r outliers}
 #events for regression
@@ -179,9 +180,15 @@ df_FDHI_srl  <- subset(df_FDHI_srl, !is.na(event_len) & flag_missing==0 & flag_m
 #1892 Laguna Salada
 df_FDHI_srl  <- subset(df_FDHI_srl, !(EQ_ID==40 & FLT_ID==1))
 #1978 IzuOshima
-df_FDHI_srl  <- subset(df_FDHI_srl, !EQ_ID==62)
+df_FDHI_srl  <- subset(df_FDHI_srl, !(EQ_ID==62 & FLT_ID==1))
 #1993 Killari
-df_FDHI_srl  <- subset(df_FDHI_srl, !EQ_ID==74)
+df_FDHI_srl  <- subset(df_FDHI_srl, !(EQ_ID==74 & FLT_ID==1))
+#2010 Pisayambo
+df_FDHI_srl <- subset(df_FDHI_srl,  !(EQ_ID==58 & FLT_ID==1))
+#
+df_FDHI_srl <- subset(df_FDHI_srl,  !(EQ_ID==52 & FLT_ID==2))
+#
+df_FDHI_srl <- subset(df_FDHI_srl,  !(EQ_ID==6 & FLT_ID==3))
 
 
 #remove mag less than 5
@@ -241,6 +248,7 @@ ggsave(file.path(dir_fig,'data_srl_mag_FDHI-SCEC.png'), plot=pl_data_FDHI_SCEC_c
 ```
 
 Summary statistics of the empirical dataset are presented below:
+
 ```{r, echo=FALSE, summary_emp_data}
 #FDHI info
 #number of events
@@ -275,6 +283,7 @@ pl_data_len_mag
 ```
 
 Summary statistics of the SCEC simulations are presented below:
+
 ```{r, echo=FALSE, summary_SCEC_data}
 #SCEC info
 #number of events
@@ -290,8 +299,8 @@ fprintf('Rupture-Length Range:
         \t minimum: %.1f\n',
         max(df_SCEC_srl$rup_srl_wide), min(df_SCEC_srl$rup_srl_wide))
 ```
-Figure 2 compares the $\mathbf{M} - SRL$ distribution of empirical data and SCEC simulations. 
-The two datasets show similar scaling supporting that the scaling relationships derived from the SCEC simulations are applicable to the empirical data. 
+
+Figure 2 compares the $\mathbf{M} - SRL$ distribution of empirical data and SCEC simulations. The two datasets show similar scaling supporting that the scaling relationships derived from the SCEC simulations are applicable to the empirical data.
 
 ```{r fig_data_mag_len_scec_all, echo=FALSE, fig.cap="Figure 2. Comparison of Magnitude - SRL distribution of empirical data and SCEC simulations"}
 pl_data_FDHI_SCEC_cmp
@@ -301,16 +310,13 @@ pl_data_FDHI_SCEC_cmp
 
 ### Rupture Width Modeling Based on SCEC Simulations
 
-The SCEC simulations were used to develop a Magnitude - Rupture width model for unbounded and width-limited ruptures.
-Two models were evaluated: (i) a linear model between $W - \mathbf{M}$, hereafter denoted as ``model w0``, and (ii) a model with a scaling break at $W_{lim}$, hereafter denoted as ``model w1``
+The SCEC simulations were used to develop a Magnitude - Rupture width model for unbounded and width-limited ruptures. Two models were evaluated: (i) a linear model between $W - \mathbf{M}$, hereafter denoted as `model w0`, and (ii) a model with a scaling break at $W_{lim}$, hereafter denoted as `model w1`
 
-The functional form for ``model_w0`` is:
-\begin{equation}
+The functional form for `model_w0` is: \begin{equation}
   \log(W) = \mathbf(M) + \epsilon_W
 \end{equation}
 
-The functional form for ``model_w1`` is:
-\begin{equation}
+The functional form for `model_w1` is: \begin{equation}
 log(W) = \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) + \epsilon_W
 \end{equation}
 
@@ -324,9 +330,7 @@ fit_model_w0 <- lm(form_model_w0, data=df_SCEC_srl)
 fit_model_w1 <- lm(form_model_w1, data=subset(df_SCEC_srl, !flag_wlim))
 ```
 
-The $W - \mathbf{M}$ model summary is presented below. 
-``model w1`` has a higher log likelihood and lower Akaike information criterion.
-
+The $W - \mathbf{M}$ model summary is presented below. `model w1` has a higher log likelihood and lower Akaike information criterion.
 
 ```{r, width_model_mag_sec_summary, echo=FALSE}
 #residuals
@@ -359,6 +363,7 @@ fprintf('Width Modeling\n
          logLik(fit_model_w0), AIC(fit_model_w0),
          sum(log(dnorm(res_model_w1_all, sd=sigma(fit_model_w1)))), 2*3 - 2*sum(log(dnorm(res_model_w1_all, sd=sigma(fit_model_w1)))) )
 ```
+
 The best estimates of the coefficients of the two candidate models are summarized in Table 3.
 
 ```{r, width_model_mag_coeffs, echo=FALSE}
@@ -369,7 +374,7 @@ kable(df_SCEC_model_width_mag_coeffs,
   kable_styling(latex_options = "hold_position")
 ```
 
-Figure 3 compares the two candidate models against the SCEC simulations. 
+Figure 3 compares the two candidate models against the SCEC simulations.
 
 ```{r, width_models_mag_fig, echo=FALSE, fig.cap="Figure 3. Comparison of candidate rupture width models against the SCEC simulations"}
 #color palette
@@ -394,12 +399,13 @@ pl_models_wlim_mag <- ggplot() + geom_point(data=df_SCEC_srl, aes(x=magnitude, y
 pl_models_wlim_mag
 ```
 
-The summary of the ``model w1`` regression is provided below: 
+The summary of the `model w1` regression is provided below:
+
 ```{r, width_model_1_summary}
 summary(fit_model_w1)
 ```
 
-Figure 4 shows the scaling of the preferred model (``model w1``) against the SCEC data. 
+Figure 4 shows the scaling of the preferred model (`model w1`) against the SCEC data.
 
 ```{r width_model_mag_pref_fig, echo=FALSE, fig.cap="Figure 4. Preferred model for rupture width scaling"}
 
@@ -443,136 +449,155 @@ pl_model_pref_wlim_mag_res
 ggsave(file.path(dir_fig,'model_preferred_wlim_mag_SCEC_res.png'), plot=pl_model_pref_wlim_mag_res, device='png', width=6.5, height=4)
 ```
 
-### SRL Model Derivation 
+### SRL Model Derivation
 
-This section presents the deviation of the $SRL\sim\mathbf{M}$ functional form.
-The Seismic Moment ($M_0$) is defined as:
+This section presents the deviation of the $SRL\sim\mathbf{M}$ functional form. The Seismic Moment ($M_0$) is defined as:
 
+```{=tex}
 \begin{equation}
 M_0 = \mu~\bar{D}~L~W
 \end{equation}
+```
+where $\mu$ is the stiffness of the crust, $\bar{D}$ is the average slip on the rupture, $L$ is the length of the rupture, and $W$ is width of the rupture. Taking the log of the previous equation and substituting the definition of the Moment Magnitude ($\mathbf{M} = \frac{2}{3}\log(M_0) - 10.7$) we get:
 
-where $\mu$ is the stiffness of the crust, $\bar{D}$ is the average slip on the rupture, $L$ is the length of the rupture, and $W$ is width of the rupture. 
-Taking the log of the previous equation and substituting the definition of the Moment Magnitude ($\mathbf{M} = \frac{2}{3}\log(M_0) - 10.7$) we get:
-
+```{=tex}
 \begin{equation}
 \mathbf{M} = \frac{2}{3}\log(\mu) + \frac{2}{3}\log(\bar{D}) + \frac{2}{3}\log(L) + \frac{2}{3}\log(W) - 10.7
 \end{equation}
-
+```
 Since stiffness of the crust ($\mu$) is constant, the previous equation simplifies to:
 
+```{=tex}
 \begin{equation}
 \mathbf{M} =  \frac{2}{3}\log(\bar{D}) + \frac{2}{3}\log(L) + \frac{2}{3}\log(W) + c
 \end{equation}
+```
+where $c$ is used to denote any arbitrary constant.
 
-where $c$ is used to denote any arbitrary constant. 
+Three commonly used scaling models for the average displacements found in the literature include the $\sqrt{A}$ model, hereafter called `model 1`, the $W$ model, hereafter called `model 2`, and the $L$ model, hereafter called `model 3` (Scholz, 1982; Romanowicz, 1992; Romanowicz and Rundle, 1993; Romanowicz, 1994; Scholz, 1994; Bodin and Brune, 1996; Pegler and Das, 1996; Scholz, 1997, 1998; Hanks and Bakun, 2002; Leonard, 2010).
 
-Three commonly used scaling models for the average displacements found in the literature include the $\sqrt{A}$ model, hereafter called ``model 1``, the $W$ model, hereafter called ``model 2``, and the $L$ model, hereafter called ``model 3`` (Scholz, 1982; Romanowicz, 1992; Romanowicz and Rundle, 1993; Romanowicz, 1994; Scholz, 1994; Bodin and Brune, 1996; Pegler and Das, 1996; Scholz, 1997, 1998; Hanks and Bakun, 2002; Leonard, 2010).
-In ``model 1``, the average displacement is assumed to scale linearly with the square root of the rupture area:
+For `model 1`, the average displacement is assumed to scale linearly with the square root of the rupture area:
 
+```{=tex}
 \begin{equation}
 \bar{D} = c \sqrt{A} = c \sqrt{L~W} 
 \end{equation}
+```
+For `model 2`, the average displacement is assumed to scale linearly with the width of the rupture:
 
-in ``model 2``, the average displacement is assumed to scale linearly with the width of the rupture:
-
+```{=tex}
 \begin{equation}
 \bar{D} = c W
 \end{equation}
+```
+while for `model 3`, the average displacement is assumed to scale linearly with the length of the rupture:
 
-while in ``model 3``, the average displacement is assumed to scale linearly with the length of the rupture:
-
+```{=tex}
 \begin{equation}
 \bar{D} = c L
 \end{equation}
-
-The three candidate models will be evaluated against the empirical data to decide which is best. 
-Using ``model 1`` the $\mathbf{M}$ scaling relationship becomes:
-\begin{equation}
+```
+Using `model 1` the $\mathbf{M}$ scaling relationship becomes: \begin{equation}
 \mathbf{M} = \log(L) + \log(W) + c
-\end{equation}
-with ``model 2`` the $\mathbf{M}$ scaling relationship becomes: 
-\begin{equation}
+\end{equation} with `model 2` the $\mathbf{M}$ scaling relationship becomes: \begin{equation}
 \mathbf{M} = \frac{2}{3}\log(L) + \frac{4}{3}\log(W) + c
-\end{equation}
-and with ``model 3`` the $\mathbf{M}$ scaling relationship becomes: 
-\begin{equation}
+\end{equation} and with `model 3` the $\mathbf{M}$ scaling relationship becomes: \begin{equation}
 \mathbf{M} = \frac{4}{3}\log(L) + \frac{2}{3}\log(W) + c
 \end{equation}
 
-Substituting the ``model w1`` from the SCEC rupture simulations, for ``model 1`` we get: 
-\begin{equation}
-\mathbf{M} = \log(L) + \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) + c
-\end{equation}
-for ``model 2`` we get:
-\begin{equation}
-\mathbf{M} = \frac{2}{3}\log(L) + \frac{4}{3} \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) + c
-\end{equation}
-and for ``model 3`` we get:
-\begin{equation}
-\mathbf{M} = \frac{4}{3}\log(L) + \frac{2}{3} \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) + c
+Solving for $\log(L)$ in previous equations `model 1` becomes: \begin{equation}
+\log(L) = \mathbf{M} - \log(W) + c
+\end{equation} `model 2` becomes: \begin{equation}
+\log(L) = \frac{3}{2} \mathbf{M} - 2 \log(W) + c
+\end{equation} and `model 3` becomes: \begin{equation}
+\log(L) = \frac{3}{4} \mathbf{M} - \frac{1}{2} \log(W) + c
 \end{equation}
 
-Assuming the surface to sub-surface rupture length scaling is of the form $\log(SRL) = c_1 \log(L) + c$, substituting it to the previous equations, condensing the constants, and solving for $\log(SRL)$, for ``model 1`` we get:
+An additional two candidate models are developed which follow $\sqrt{A}$ scaling for unbounded ruptures and transition to $L$ and $W$ scaling, respectively, for width-limited events. The two models are referred to as `model 2'` and `model 3'` and their functional forms are provided next. The `model 2'` functional form is: \begin{equation}
+\log(L) = \begin{cases}  \mathbf{M} - \log(W) + c & \mathbf{M} \le \mathbf{M}_{lim} \\  \frac{3}{2} \mathbf{M} - 2 \log(W) + c_2' + c  & \mathbf{M} > \mathbf{M}_{lim}  \end{cases}
+\end{equation} while, the `model 3'` functional form is: \begin{equation}
+\log(L) = \begin{cases}  \mathbf{M} - \log(W) + c & \mathbf{M} \le \mathbf{M}_{lim} \\  \frac{3}{4} \mathbf{M} - \frac{1}{2} \log(W) + c_3' + c & \mathbf{M} > \mathbf{M}_{lim} \end{cases}
+\end{equation} $c_2'$ and $c_3'$ are added in order to have a continuous transition between the two branches. The transition from unbounded to width-limited events occurs at $\mathbf{M}_{lim}$, $W_{lim}$ coordinate pair. Solving for $c_2'$ and $c_3'$ at the transition point we get:
+
 \begin{equation}
-\log(SRL) = c_1 \left( \mathbf{M} - \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) \right) + c_2 = c_1 X_1 + c
-\end{equation}
-for ``model 2`` we get:
-\begin{equation}
-\log(SRL) = c_1 \left( \frac{3}{2} \mathbf{M} - 2 \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) \right) + c_2 = c_1 X_2 + c
-\end{equation}
-and for ``model 3`` we get:
-\begin{equation}
-\log(SRL) = c_1 \left( \frac{3}{4} \mathbf{M} - \frac{1}{2} \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) \right) + c_2 = c_1 X_2 + c
+c_2' = -\frac{1}{2} \mathbf{M}_{lim} + \log(W_{lim})
+\end{equation} \begin{equation}
+c_3' = \frac{1}{4} \mathbf{M}_{lim} - \frac{1}{2} \log(W_{lim})
+\end{equation} With the estimated coefficients, the previous equations can be simplified. `model 2'` becomes: \begin{equation}
+\log(L) = \frac{3}{2} \mathbf{M} - \frac{1}{2} \min(\mathbf{M},\mathbf{M}_{lim}) - \log(W) + c
+\end{equation} and `model 3'` becomes: \begin{equation}
+\log(L) = \frac{3}{4} \mathbf{M} + \frac{1}{4} \min(\mathbf{M},\mathbf{M}_{lim}) - \log(W) + c
 \end{equation}
 
-The previous equations can be expressed as linear models with, $X_1 = \mathbf{M} - \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})$, $X_2 = \frac{3}{2} \mathbf{M} - 2 \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})$, and $X_3 = \frac{3}{4} \mathbf{M} - \frac{1}{2} \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})$.
+Substituting the `model w1` from the SCEC rupture simulations to the `model 1` functional form we get: \begin{equation}
+\log(L) = \mathbf{M} - \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) + c
+\end{equation} for `model 2` we get: \begin{equation}
+\log(L) = \frac{3}{2} \mathbf{M} - 2 min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) + c
+\end{equation} and for `model 3` we get: \begin{equation}
+\log(L) = \frac{3}{4} \mathbf{M} - \frac{1}{2} min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) + c
+\end{equation}
 
+Similarly, for `model 2'` we get: \begin{equation}
+\log(L) = \frac{3}{2} \mathbf{M} - \frac{1}{2} \min(\mathbf{M},\mathbf{M}_{lim}) - min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) + c
+\end{equation} and for `model 3'` we get: \begin{equation}
+\log(L) = \frac{3}{4} \mathbf{M} + \frac{1}{4} \min(\mathbf{M},\mathbf{M}_{lim}) - min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) + c
+\end{equation}
 
-The effect of the style of faulting is also considered through the use of additive terms to account for differences in the static stress drop. 
-The static stress drop is defined as:
-\begin{equation}
+Assuming the surface to sub-surface rupture length scaling is of the form $\log(SRL) = c_1 \log(L) + c$, substituting it to the previous equations, condensing the constants, and solving for $\log(SRL)$, for `model 1` we get: \begin{equation}
+\log(SRL) = c_1 \left( \mathbf{M} - \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) \right) + c_2 = c_1 X_1 + c_2
+\end{equation} for `model 2` we get: \begin{equation}
+\log(SRL) = c_1 \left( \frac{3}{2} \mathbf{M} - 2 \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) \right) + c_2 = c_1 X_2 + c_2
+\end{equation} for `model 3` we get: \begin{equation}
+\log(SRL) = c_1 \left( \frac{3}{4} \mathbf{M} - \frac{1}{2} \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) \right) + c_2 = c_1 X_3 + c_2
+\end{equation} for `model 2'` we get: \begin{equation}
+\log(SRL) = c_1 \left( \frac{3}{2} \mathbf{M} - \frac{1}{2} \min(\mathbf{M},\mathbf{M}_{lim}) - \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) \right) + c_2  = c_1 X_2' + c_2
+\end{equation} and for `model 3'` we get: \begin{equation}
+\log(SRL) = c_1 \left( \frac{3}{4} \mathbf{M} + \frac{1}{4} \min(\mathbf{M},\mathbf{M}_{lim}) - \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})) \right) + c_2  = c_1 X_3' + c_2
+\end{equation}
+
+The previous equations can be expressed as linear models with, $X_1 = \mathbf{M} - \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})$, $X_2 = \frac{3}{2} \mathbf{M} - 2 \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})$, $X_3 = \frac{3}{4} \mathbf{M} - \frac{1}{2} \min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim})$, $X_2' = \frac{3}{2} \mathbf{M} - \frac{1}{2} \min(\mathbf{M},\mathbf{M}_{lim}) - min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim}))$, and $X_3' = \frac{3}{4} \mathbf{M} + \frac{1}{4} \min(\mathbf{M},\mathbf{M}_{lim}) - min(\beta_1 + \beta_2 \mathbf{M}, \log(W_{lim}))$.
+
+The effect of the style of faulting is also considered through the use of additive terms to account for differences in the static stress drop. The static stress drop is defined as: \begin{equation}
 \Delta \sigma = C \mu \frac{\bar{D}}{L_C}
-\end{equation}
-thus, in log scale, a shift in the stress drop will be accompanied by a linear shift in the average displacement ($\log(\bar{D}) = \log(\Delta \sigma) + const$), which, in turn, will shift the intercept of the $SLR \sim \mathbf{M}$ models  
-Two modeling approaches were evaluated: (i) a common additive term for dip-slip events ($F_D$), and (ii) separate additive terms for Normal and Reverse faults ($F_N$ and $F_R$). 
-The style of faulting dependence introduced through $F_D$, $F_N$, and $F_R$ acts in addition to the style of faulting dependence introduced by the different dip angles between the different styles of faulting. 
+\end{equation} thus, in log scale, a shift in the stress drop will be accompanied by a linear shift in the average displacement ($\log(\bar{D}) = \log(\Delta \sigma) + const$), which, in turn, will shift the intercept of the $SLR \sim \mathbf{M}$ models\
+Two modeling approaches were evaluated: (i) a common additive term for dip-slip events ($F_D$), and (ii) separate additive terms for Normal and Reverse faults ($F_N$ and $F_R$). The style of faulting dependence introduced through $F_D$, $F_N$, and $F_R$ acts in addition to the style of faulting dependence introduced by the different dip angles between the different styles of faulting.
 
-The final regression relationship for ``model 1`` is:
-\begin{equation}
+The final regression relationship for `model 1` is: \begin{equation}
 \log(SRL) = c_1 X_1 + c_2 F_D + c_3
-\end{equation}
-the final regression relationship for ``model 2`` is:
-\begin{equation}
+\end{equation} the final regression relationship for `model 2` is: \begin{equation}
 \log(SRL) = c_1 X_2 + c_2 F_D + c_3
-\end{equation}
-the final regression relationship for ``model 3`` is:
-\begin{equation}
+\end{equation} the final regression relationship for `model 3` is: \begin{equation}
 \log(SRL) = c_1 X_3 + c_2 F_D + c_3
-\end{equation}
-and the final regression for separate additive terms with $D \sim \sqrt{A}$ scaling, hereafter denoted as ``model 1alt`` is:
-\begin{equation}
+\end{equation} the final regression relationship for `model 2'` is: \begin{equation}
+\log(SRL) = c_1 X'_2 + c_2 F_D + c_3
+\end{equation} the final regression relationship for `model 3'` is: \begin{equation}
+\log(SRL) = c_1 X'_3 + c_2 F_D + c_3
+\end{equation} and the final regression for separate additive terms with $D \sim \sqrt{A}$ scaling, hereafter denoted as `model 1alt` is: \begin{equation}
 \log(SRL) = c_1 X_1 + c_2 F_N + c_3 F_R + c_4
 \end{equation}
-Lastly a Wells and Coppersmith type model was also evaluated, hereafter referred as ``model 0``, to investigate the impact of width-limited ruptures on current state-of-practice models. 
-\begin{equation}
+
+Lastly a Wells and Coppersmith type model was also evaluated, hereafter referred as `model 0`, to investigate the impact of width-limited ruptures on current state-of-practice models. \begin{equation}
 \log(SRL) = c_1 \mathbf{M} + c_2 F_D + c_3
 \end{equation}
 
-The coefficients of the previous equations are estimated through a maximum likelihood regression. 
+The coefficients of the previous equations are estimated through a maximum likelihood regression.
 
 ### Surface Rupture Length Modeling Based on Empirical Data
 
-The five candidate models where were evaluated in predicting $SRL$ as a function of $\mathbf{M}$  are summarized in Table 4.
-
+The seven candidate models evaluated in predicting $SRL$ as a function of $\mathbf{M}$ are summarized in Table 4.
 
 ```{r, tab4, echo=FALSE}
-df <- data.frame(model_name = c("model 0","model 1","model 2","model 3", "model 1 alt"),
-                 model_fun  = c("$\\log(SLR)\\sim 1 + \\mathbf{M} + F_D$","$\\log(SLR)\\sim1 + X_1 + F_D$","$\\log(SLR)\\sim 1+X_2 + F_D$","$\\log(SLR)\\sim 1+X_3 + F_D$","$\\log(SLR)\\sim1 + X_1 + F_N+F_R$"),
+df <- data.frame(model_name = c("model 0","model 1","model 2","model 3","model 2'","model 3'", "model 1 alt"),
+                 model_fun  = c("$\\log(SLR)\\sim 1 + \\mathbf{M} + F_D$",
+                                "$\\log(SLR)\\sim1 + X_1 + F_D$","$\\log(SLR)\\sim 1+X_2    + F_D$","$\\log(SLR)\\sim 1+X_3    + F_D$",
+                                                                 "$\\log(SLR)\\sim 1+X_{2'} + F_D$","$\\log(SLR)\\sim 1+X_{3'} + F_D$",
+                                "$\\log(SLR)\\sim1 + X_1 + F_N+F_R$"),
                  model_desc = c("W&C 94 type model",
                                 "$\\bar{D} \\sim \\sqrt{A}$ type model with $F_D$ addative term",
                                 "$\\bar{D} \\sim {W}$ type model with $F_D$ addative term",
                                 "$\\bar{D} \\sim {L}$ type model with $F_D$ addative term",
+                                "$\\bar{D} \\sim \\sqrt{A},{W}$ type model with $F_D$ addative term",
+                                "$\\bar{D} \\sim \\sqrt{A},{L}$ type model with $F_D$ addative term",
                                 "$\\bar{D} \\sim \\sqrt{A}$ type model with $F_N$ & $F_R$ addative terms"))
 kable(df, col.names = c("Name", "Functional Form", "Description"),  caption = "Table 4. Candiate Regression Models") %>%
   kable_styling(latex_options = "hold_position")
@@ -589,43 +614,50 @@ c2_rw <- df_SCEC_model_width_mag_coeffs['model_w1','M']
 df_FDHI_srl$rup_width_unbnd <- 10^(c1_rw + c2_rw*df_FDHI_srl$magnitude)
 df_FDHI_srl$rup_width <- pmin(df_FDHI_srl$rup_width_unbnd, df_FDHI_srl$seis_width)
 
+#transitioning magnitude
+df_FDHI_srl$magnitude_lim <- 1/c2_rw * (log10(df_FDHI_srl$seis_width) - c1_rw )
+
 #identify width limited events
 df_FDHI_srl$flag_wlim <- FALSE
 df_FDHI_srl[df_FDHI_srl$rup_width >= df_FDHI_srl$seis_width,'flag_wlim'] <- TRUE 
 
-
 # SRL Modeling
 #scaling parameters
+#simple models
 df_FDHI_srl$x1 <-     df_FDHI_srl$magnitude -   log10(df_FDHI_srl$rup_width)
 df_FDHI_srl$x2 <- 3/2*df_FDHI_srl$magnitude - 2*log10(df_FDHI_srl$rup_width)
 df_FDHI_srl$x3 <- 3/4*df_FDHI_srl$magnitude - 1/2*log10(df_FDHI_srl$rup_width)
+#composite models
+df_FDHI_srl$x2prime <- 3/2*df_FDHI_srl$magnitude - 1/2*pmin(df_FDHI_srl$magnitude,df_FDHI_srl$magnitude_lim) - log10(df_FDHI_srl$rup_width)
+df_FDHI_srl$x3prime <- 3/4*df_FDHI_srl$magnitude + 1/4*pmin(df_FDHI_srl$magnitude,df_FDHI_srl$magnitude_lim) - log10(df_FDHI_srl$rup_width)
+
 #standard deviation weights
 width_scl <- 0.1
 sig_scl   <- 2.
 df_FDHI_srl$reg_wt <- ( 1 + (sig_scl-1) * sigmoid( 2.197225 * (log10(df_FDHI_srl$rup_width_unbnd)-log10(df_FDHI_srl$seis_width))/ width_scl ) )^2
 
 ## Regression formulas
-form_model_srl0m     <- log10(event_len) ~ 1 + magnitude + FD
-form_model_srl1m     <- log10(event_len) ~ 1 + x1 + FD
-form_model_srl2m     <- log10(event_len) ~ 1 + x2 + FD
-form_model_srl3m     <- log10(event_len) ~ 1 + x3 + FD
-form_model_srl1m_alt <- log10(event_len) ~ 1 + x1 + FN + FR
+form_model_srl0m     <- log10(event_len) ~ 1 + magnitude  + FD
+form_model_srl1m     <- log10(event_len) ~ 1 + x1         + FD
+form_model_srl2m     <- log10(event_len) ~ 1 + x2         + FD
+form_model_srl3m     <- log10(event_len) ~ 1 + x3         + FD
+form_model_srl2pm    <- log10(event_len) ~ 1 + x2prime    + FD
+form_model_srl3pm    <- log10(event_len) ~ 1 + x3prime    + FD
+form_model_srl1m_alt <- log10(event_len) ~ 1 + x1         + FN + FR
 
 ## Regression
 fit_model_srl0m     <- lm(form_model_srl0m,     data=df_FDHI_srl)
 fit_model_srl1m     <- lm(form_model_srl1m,     data=df_FDHI_srl, weights=reg_wt)
 fit_model_srl2m     <- lm(form_model_srl2m,     data=df_FDHI_srl, weights=reg_wt)
 fit_model_srl3m     <- lm(form_model_srl3m,     data=df_FDHI_srl, weights=reg_wt)
+fit_model_srl2pm    <- lm(form_model_srl2pm,    data=df_FDHI_srl, weights=reg_wt)
+fit_model_srl3pm    <- lm(form_model_srl3pm,    data=df_FDHI_srl, weights=reg_wt)
 fit_model_srl1m_alt <- lm(form_model_srl1m_alt, data=df_FDHI_srl, weights=reg_wt)
 ```
 
-The print out below summarizes the log-likelihood and Akaike Information Criterion (AIC) for the different candidate models, while Table 5 summarizes the estimated coefficients. 
-From a statistical perspective, ``model 1`` and ``model 2`` have similar good predictive performance, with Model 1 being slightly better, ``model 3`` has poorer performance, and ``model 0`` is the worst. 
-``model 0`` does not consider the finite thickness of the seismogenic zone showcasing the limitations of a purely empirical model. 
-``model 1`` to ``model 3`` have a break in the magnitude scaling when the width of the rupture reaches the width of the seismogenic zone allowing them to better fit the data.
-From seismological theory, ``model 1`` and ``model 2`` should have unit slopes with respect to $X_1$ and $X_2$, if the subsurface rupture length ($L$) was the response variable.
-Acknowledging the difference in the response variable, ``model 1`` is preferred as it is closer to the theoretical slope. 
-In log-scale, any scalar difference between $SLR$ and $L$ would affect the constant.
+The print out below summarizes the log-likelihood and Akaike Information Criterion (AIC) for the different candidate models, while Table 5 summarizes the estimated coefficients.
+
+From a statistical perspective, `model 1`, `model 2`, and `model 3` have similar good predictive performance, with `model 1` being slightly better. The composite models `model 2'` and `model 3'` have poorer performance, and `model 0` is the worst. `model 0` does not consider the finite thickness of the seismogenic zone showcasing the limitations of a purely empirical model. `model 1` to `model 3'` have a break in the magnitude scaling when the width of the rupture reaches the width of the seismogenic zone allowing them to better fit the data.
 
 ```{r, srl_model_mag_summary, echo=FALSE}
 #residuals
@@ -633,6 +665,8 @@ df_FDHI_srl$srl0m_res     <- resid(fit_model_srl0m)
 df_FDHI_srl$srl1m_res     <- resid(fit_model_srl1m)
 df_FDHI_srl$srl2m_res     <- resid(fit_model_srl2m)
 df_FDHI_srl$srl3m_res     <- resid(fit_model_srl3m)
+df_FDHI_srl$srl2pm_res    <- resid(fit_model_srl2pm)
+df_FDHI_srl$srl3pm_res    <- resid(fit_model_srl3pm)
 df_FDHI_srl$srl1m_alt_res <- resid(fit_model_srl1m_alt)
 
 #coefficients
@@ -640,24 +674,137 @@ df_model_srl_mag_coef <-                                  as.data.frame(t(coef(f
 df_model_srl_mag_coef <- bind_rows(df_model_srl_mag_coef, as.data.frame(t(coef(fit_model_srl1m)),     row.names='model_srl1'))
 df_model_srl_mag_coef <- bind_rows(df_model_srl_mag_coef, as.data.frame(t(coef(fit_model_srl2m)),     row.names='model_srl2'))
 df_model_srl_mag_coef <- bind_rows(df_model_srl_mag_coef, as.data.frame(t(coef(fit_model_srl3m)),     row.names='model_srl3'))
+df_model_srl_mag_coef <- bind_rows(df_model_srl_mag_coef, as.data.frame(t(coef(fit_model_srl2pm)),    row.names='model_srl2p'))
+df_model_srl_mag_coef <- bind_rows(df_model_srl_mag_coef, as.data.frame(t(coef(fit_model_srl3pm)),    row.names='model_srl3p'))
 df_model_srl_mag_coef <- bind_rows(df_model_srl_mag_coef, as.data.frame(t(coef(fit_model_srl1m_alt)), row.names='model_srl1_alt'))
 df_model_srl_mag_coef['model_srl0','sigma']     <- sigma(fit_model_srl0m)
 df_model_srl_mag_coef['model_srl1','sigma']     <- sigma(fit_model_srl1m)
 df_model_srl_mag_coef['model_srl2','sigma']     <- sigma(fit_model_srl2m)
 df_model_srl_mag_coef['model_srl3','sigma']     <- sigma(fit_model_srl3m)
+df_model_srl_mag_coef['model_srl2p','sigma']    <- sigma(fit_model_srl2pm)
+df_model_srl_mag_coef['model_srl3p','sigma']    <- sigma(fit_model_srl3pm)
 df_model_srl_mag_coef['model_srl1_alt','sigma'] <- sigma(fit_model_srl1m_alt)
+
 #rename columns
 colnames(df_model_srl_mag_coef)[colnames(df_model_srl_mag_coef)=='(Intercept)'] <- 'intrcp'
 colnames(df_model_srl_mag_coef)[colnames(df_model_srl_mag_coef)=='magnitude']   <- 'M'
 colnames(df_model_srl_mag_coef)[colnames(df_model_srl_mag_coef)=='x1']          <- 'X1'
 colnames(df_model_srl_mag_coef)[colnames(df_model_srl_mag_coef)=='x2']          <- 'X2'
 colnames(df_model_srl_mag_coef)[colnames(df_model_srl_mag_coef)=='x3']          <- 'X3'
+colnames(df_model_srl_mag_coef)[colnames(df_model_srl_mag_coef)=='x2prime']     <- 'X2prime'
+colnames(df_model_srl_mag_coef)[colnames(df_model_srl_mag_coef)=='x3prime']     <- 'X3prime'
 #reorder model coefficients
-df_model_srl_mag_coef <- df_model_srl_mag_coef[,c('intrcp','M','X1','X2','X3','FD','FN','FR','sigma')]
+df_model_srl_mag_coef <- df_model_srl_mag_coef[,c('intrcp','M','X1','X2','X3','X2prime','X3prime','FD','FN','FR','sigma')]
 
+## Comparison of different models
+fprintf("SRL Modeling:
+        \tModel0:\n\t\tLogLik: %.2f\n\t\tAIC: %.2f\n 
+        \tModel1:\n\t\tLogLik: %.2f\n\t\tAIC: %.2f\n
+        \tModel2:\n\t\tLogLik: %.2f\n\t\tAIC: %.2f\n
+        \tModel3:\n\t\tLogLik: %.2f\n\t\tAIC: %.2f\n
+        \tModel2':\n\t\tLogLik: %.2f\n\t\tAIC: %.2f\n
+        \tModel3':\n\t\tLogLik: %.2f\n\t\tAIC: %.2f\n
+        \tModel1 alt.:\n\t\tLogLik: %.2f\n\t\tAIC: %.2f\n\n",
+        logLik(fit_model_srl0m), AIC(fit_model_srl0m),
+        logLik(fit_model_srl1m), AIC(fit_model_srl1m),
+        logLik(fit_model_srl2m), AIC(fit_model_srl2m),
+        logLik(fit_model_srl3m), AIC(fit_model_srl3m),
+        logLik(fit_model_srl2pm), AIC(fit_model_srl2pm),
+        logLik(fit_model_srl3pm), AIC(fit_model_srl3pm),
+        logLik(fit_model_srl1m_alt), AIC(fit_model_srl1m_alt))
+
+#empirical sigma below and above width threshold of model 1
+sig_m1_wu  <- sqrt(mean(df_FDHI_srl[!df_FDHI_srl$flag_wlim,'srl1m_res']^2))
+sig_m1_wl  <- sqrt(mean(df_FDHI_srl[ df_FDHI_srl$flag_wlim,'srl1m_res']^2))
+sig_m2_wu  <- sqrt(mean(df_FDHI_srl[!df_FDHI_srl$flag_wlim,'srl2m_res']^2))
+sig_m2_wl  <- sqrt(mean(df_FDHI_srl[ df_FDHI_srl$flag_wlim,'srl2m_res']^2))
+sig_m3_wu  <- sqrt(mean(df_FDHI_srl[!df_FDHI_srl$flag_wlim,'srl3m_res']^2))
+sig_m3_wl  <- sqrt(mean(df_FDHI_srl[ df_FDHI_srl$flag_wlim,'srl3m_res']^2))
+sig_m2p_wu <- sqrt(mean(df_FDHI_srl[!df_FDHI_srl$flag_wlim,'srl2pm_res']^2))
+sig_m2p_wl <- sqrt(mean(df_FDHI_srl[ df_FDHI_srl$flag_wlim,'srl2pm_res']^2))
+sig_m3p_wu <- sqrt(mean(df_FDHI_srl[!df_FDHI_srl$flag_wlim,'srl3pm_res']^2))
+sig_m3p_wl <- sqrt(mean(df_FDHI_srl[ df_FDHI_srl$flag_wlim,'srl3pm_res']^2))
+sig_m1_alt_wu  <- sqrt(mean(df_FDHI_srl[!df_FDHI_srl$flag_wlim,'srl1m_alt_res']^2))
+sig_m1_alt_wl  <- sqrt(mean(df_FDHI_srl[ df_FDHI_srl$flag_wlim,'srl1m_alt_res']^2))
+fprintf("Standard Deviations:\n\tModel 1:\n\t\tEmpirical ratio for std of width limted to unbounded events is: %.2f\n
+         Standard Deviations:\n\tModel 2:\n\t\tEmpirical ratio for std of width limted to unbounded events is: %.2f\n
+         Standard Deviations:\n\tModel 3:\n\t\tEmpirical ratio for std of width limted to unbounded events is: %.2f\n
+         Standard Deviations:\n\tModel 2':\n\t\tEmpirical ratio for std of width limted to unbounded events is: %.2f\n
+         Standard Deviations:\n\tModel 3':\n\t\tEmpirical ratio for std of width limted to unbounded events is: %.2f\n
+         Standard Deviations:\n\tModel 1 alt.:\n\t\tEmpirical ratio for std of width limted to unbounded events is: %.2f\n\n",
+        sig_m1_wu/sig_m1_wl,
+        sig_m2_wu/sig_m2_wl,
+        sig_m3_wu/sig_m3_wl,
+        sig_m2p_wu/sig_m2p_wl,
+        sig_m3p_wu/sig_m3p_wl,
+        sig_m1_alt_wu/sig_m1_alt_wl)
+```
+
+```{r, srl_model_mag_coeffs, echo=FALSE}
+#coefficients
+kable(df_model_srl_mag_coef, 
+      col.names = c("Intercept","$\\mathbf{M}$ scaling","$X_1$ scaling","$X_2$ scaling","$X_3$ scaling","$X_{2'}$ scaling","$X_{3'}$ scaling","$F_N$","$F_R$","$F_D$","$\\sigma$"),  
+      caption = "Table 5. SRL Model Coefficients") %>%
+  kable_styling(latex_options = "hold_position")
+```
+
+From seismological theory, `model 1` to `model 3'` should have unit slopes with respect to the magnitude scaling terms (e.g. $X_1$, $X_2$, $X_3$), if the average displacement in the empirical data follows the assumed scaling law and the subsurface rupture length ($L$) was the response variable. With $SRL$ as a response variable, a magnitude scaling term greater than one would imply that the surface to sub-surface rupture length ratio increases with magnitude while a magnitude scaling term less than one would imply that the surface to sub-surface rupture length ratio decreases with magnitude. Intuitively, a greater than one magnitude scaling term is expected, as for large events, a larger part of the rupture is expected to reach the surface. Considering that, `model 1` with a fixed magnitude scaling slope equal to unity is selected as a preferred model, hereafter called `model1_fxd`. The piece of code shows regression of the preferred model.
+
+```{r srl_model_pref_mag_regression}
+## Prefered model 
+# regression formula
+form_model_srl1m_fxd <- log10(event_len) ~ 1 + offset(x1) + FD
+# regression
+fit_model_srl1m_fxd <- lm(form_model_srl1m_fxd, data=df_FDHI_srl, weights=reg_wt)
+#residuals
+df_FDHI_srl$srl1m_fxd_res <- resid(fit_model_srl1m_fxd)
+
+#coefficients
+df_model_pref_srl_mag_coef <- as.data.frame(t(coef(fit_model_srl1m_fxd)), row.names='model_srl1_fxd')
+df_model_pref_srl_mag_coef['model_srl1_fxd','sigma'] <- sigma(fit_model_srl1m_fxd)
+df_model_pref_srl_mag_coef['model_srl1_fxd','x1']    <- 1
+
+#rename columns
+colnames(df_model_pref_srl_mag_coef)[colnames(df_model_pref_srl_mag_coef)=='(Intercept)'] <- 'intrcp'
+colnames(df_model_pref_srl_mag_coef)[colnames(df_model_pref_srl_mag_coef)=='x1']          <- 'X1'
+#reorder model coefficients
+df_model_pref_srl_mag_coef <- df_model_pref_srl_mag_coef[,c('intrcp','X1','FD','sigma')]
+
+
+## Comparison of different models
+fprintf("SRL Modeling:
+        \tModel1 fxd.:\n\t\tLogLik: %.2f\n\t\tAIC: %.2f\n\n",
+        logLik(fit_model_srl1m_fxd), AIC(fit_model_srl1m_fxd))
+
+#empirical sigma below and above width threshold of model 1
+sig_m1_fxd_wu  <- sqrt(mean(df_FDHI_srl[!df_FDHI_srl$flag_wlim,'srl1m_fxd_res']^2))
+sig_m1_fxd_wl  <- sqrt(mean(df_FDHI_srl[ df_FDHI_srl$flag_wlim,'srl1m_fxd_res']^2))
+fprintf("Standard Deviations:\n\tModel 1 fxd.:\n\t\tEmpirical ratio for std of width limted to unbounded events is: %.2f\n\n",
+        sig_m1_fxd_wu/sig_m1_fxd_wl)
+```
+
+```{r, srl_model_pef_mag_coeffs, echo=FALSE}
+#coefficients
+kable(df_model_pref_srl_mag_coef, 
+      col.names = c("Intercept","$X_1$ scaling","$F_D$","$\\sigma$"),  
+      caption = "Table 6. SRL Preferred Model Coefficients") %>%
+  kable_styling(latex_options = "hold_position")
+
+```
+
+```{r, srl_model_mag_coeffs_summarize, echo=FALSE}
+#summarize all model coefficients
+df_model_srl_mag_coef <- bind_rows(df_model_srl_mag_coef, df_model_pref_srl_mag_coef)
+
+#save SRL regression coefficients
+write.csv(df_model_srl_mag_coef,  file=file.path(dir_out, 'model_coeffs_srl_mag.csv'))
+summary(fit_model_srl1m)
+```
+
+```{r, srl_model_predictions, echo=FALSE}
 ## Prediction
 #initialize dataframe
-df_predict_srl_mag <- data.frame(magnitude=linspace(5, 8.5, 100))
+df_predict_srl_mag <- data.frame(magnitude=seq(5,8.5,0.01))
 #style of faulting
 df_predict_srl_mag$FN <- 0
 df_predict_srl_mag$FR <- 0
@@ -670,29 +817,52 @@ df_predict_srl_mag$rup_width_unbnd <- 10^(c1_rw + c2_rw*df_predict_srl_mag$magni
 df_predict_srl_mag$srl0m_d   <- 10^( predict(fit_model_srl0m, df_predict_srl_mag) )
 #models 1, 1alt, and 2
 #15km seis width
-df_predict_srl_mag$x1           <- df_predict_srl_mag$magnitude - pmin(log10(df_predict_srl_mag$rup_width_unbnd), log10(15))
-df_predict_srl_mag$x2           <- 3/2*df_predict_srl_mag$magnitude - 2*pmin(log10(df_predict_srl_mag$rup_width_unbnd), log10(15)) 
-df_predict_srl_mag$x3           <- 3/4*df_predict_srl_mag$magnitude - 1/2*pmin(log10(df_predict_srl_mag$rup_width_unbnd), log10(15)) 
+df_predict_srl_mag$magnitude_lim <-  1/c2_rw * (log10(examp_seis/sin(deg2rad(examp_dip))) - c1_rw )
+df_predict_srl_mag$x1           <- df_predict_srl_mag$magnitude     -     pmin( log10(df_predict_srl_mag$rup_width_unbnd), log10(examp_seis/sin(deg2rad(examp_dip))) )
+df_predict_srl_mag$x2           <- 3/2*df_predict_srl_mag$magnitude - 2*  pmin( log10(df_predict_srl_mag$rup_width_unbnd), log10(examp_seis/sin(deg2rad(examp_dip))) ) 
+df_predict_srl_mag$x3           <- 3/4*df_predict_srl_mag$magnitude - 1/2*pmin( log10(df_predict_srl_mag$rup_width_unbnd), log10(examp_seis/sin(deg2rad(examp_dip))) ) 
+df_predict_srl_mag$x2prime      <- 3/2*df_predict_srl_mag$magnitude -     pmin( log10(df_predict_srl_mag$rup_width_unbnd), log10(examp_seis/sin(deg2rad(examp_dip))) ) - 1/2*pmin(df_predict_srl_mag$magnitude,df_predict_srl_mag$magnitude_lim)
+df_predict_srl_mag$x3prime      <- 3/4*df_predict_srl_mag$magnitude -     pmin( log10(df_predict_srl_mag$rup_width_unbnd), log10(examp_seis/sin(deg2rad(examp_dip))) ) + 1/4*pmin(df_predict_srl_mag$magnitude,df_predict_srl_mag$magnitude_lim) 
+
 df_predict_srl_mag$srl1m_d1     <- 10^( predict(fit_model_srl1m,     df_predict_srl_mag) )
 df_predict_srl_mag$srl2m_d1     <- 10^( predict(fit_model_srl2m,     df_predict_srl_mag) )
 df_predict_srl_mag$srl3m_d1     <- 10^( predict(fit_model_srl3m,     df_predict_srl_mag) )
+df_predict_srl_mag$srl2pm_d1    <- 10^( predict(fit_model_srl2pm,    df_predict_srl_mag) )
+df_predict_srl_mag$srl3pm_d1    <- 10^( predict(fit_model_srl3pm,    df_predict_srl_mag) )
 df_predict_srl_mag$srl1m_alt_d1 <- 10^( predict(fit_model_srl1m_alt, df_predict_srl_mag) )
+df_predict_srl_mag$srl1m_fxd_d1 <- 10^( predict(fit_model_srl1m_fxd, df_predict_srl_mag) )
+df_predict_srl_mag1 <- df_predict_srl_mag
 #20km seis width
-df_predict_srl_mag$x1           <- df_predict_srl_mag$magnitude - pmin(log10(df_predict_srl_mag$rup_width_unbnd), log10(20))
-df_predict_srl_mag$x2           <- 3/2*df_predict_srl_mag$magnitude - 2*pmin(log10(df_predict_srl_mag$rup_width_unbnd), log10(20)) 
-df_predict_srl_mag$x3           <- 3/4*df_predict_srl_mag$magnitude - 1/2*pmin(log10(df_predict_srl_mag$rup_width_unbnd), log10(20)) 
-df_predict_srl_mag$srl1m_d2     <- 10^( predict(fit_model_srl1m, df_predict_srl_mag) )
-df_predict_srl_mag$srl2m_d2     <- 10^( predict(fit_model_srl2m, df_predict_srl_mag) )
-df_predict_srl_mag$srl3m_d2     <- 10^( predict(fit_model_srl3m, df_predict_srl_mag) )
+df_predict_srl_mag$magnitude_lim <-  1/c2_rw * (log10(examp_seis_alt/sin(deg2rad(examp_dip))) - c1_rw )
+df_predict_srl_mag$x1           <- df_predict_srl_mag$magnitude     -     pmin( log10(df_predict_srl_mag$rup_width_unbnd), log10(examp_seis_alt/sin(deg2rad(examp_dip))) )
+df_predict_srl_mag$x2           <- 3/2*df_predict_srl_mag$magnitude - 2*  pmin( log10(df_predict_srl_mag$rup_width_unbnd), log10(examp_seis_alt/sin(deg2rad(examp_dip))) ) 
+df_predict_srl_mag$x3           <- 3/4*df_predict_srl_mag$magnitude - 1/2*pmin( log10(df_predict_srl_mag$rup_width_unbnd), log10(examp_seis_alt/sin(deg2rad(examp_dip))) ) 
+df_predict_srl_mag$x2prime      <- 3/2*df_predict_srl_mag$magnitude -     pmin( log10(df_predict_srl_mag$rup_width_unbnd), log10(examp_seis_alt/sin(deg2rad(examp_dip))) ) - 1/2*pmin(df_predict_srl_mag$magnitude,df_predict_srl_mag$magnitude_lim)
+df_predict_srl_mag$x3prime      <- 3/4*df_predict_srl_mag$magnitude -     pmin( log10(df_predict_srl_mag$rup_width_unbnd), log10(examp_seis_alt/sin(deg2rad(examp_dip))) ) + 1/4*pmin(df_predict_srl_mag$magnitude,df_predict_srl_mag$magnitude_lim)
+
+df_predict_srl_mag$srl1m_d2     <- 10^( predict(fit_model_srl1m,     df_predict_srl_mag) )
+df_predict_srl_mag$srl2m_d2     <- 10^( predict(fit_model_srl2m,     df_predict_srl_mag) )
+df_predict_srl_mag$srl3m_d2     <- 10^( predict(fit_model_srl3m,     df_predict_srl_mag) )
+df_predict_srl_mag$srl2pm_d2    <- 10^( predict(fit_model_srl2pm,   df_predict_srl_mag) )
+df_predict_srl_mag$srl3pm_d2    <- 10^( predict(fit_model_srl3pm,   df_predict_srl_mag) )
 df_predict_srl_mag$srl1m_alt_d2 <- 10^( predict(fit_model_srl1m_alt, df_predict_srl_mag) )
-#20km seis width and dip-slip
-df_predict_srl_mag$x1           <- df_predict_srl_mag$magnitude - pmin(log10(df_predict_srl_mag$rup_width_unbnd), log10(15/sin(deg2rad(45))) )
-df_predict_srl_mag$x2           <- 3/2*df_predict_srl_mag$magnitude - 2*pmin(log10(df_predict_srl_mag$rup_width_unbnd), log10(15/sin(deg2rad(45))) ) 
-df_predict_srl_mag$x3           <- 3/4*df_predict_srl_mag$magnitude - 1/2*pmin(log10(df_predict_srl_mag$rup_width_unbnd), log10(15/sin(deg2rad(45))) ) 
+df_predict_srl_mag$srl1m_fxd_d2 <- 10^( predict(fit_model_srl1m_fxd, df_predict_srl_mag) )
+df_predict_srl_mag2 <- df_predict_srl_mag
+#15m seis width and dip-slip
 df_predict_srl_mag$FD <- 1
-df_predict_srl_mag$srl1m_d1FD   <- 10^( predict(fit_model_srl1m, df_predict_srl_mag) )
-df_predict_srl_mag$srl2m_d1FD   <- 10^( predict(fit_model_srl2m, df_predict_srl_mag) )
-df_predict_srl_mag$srl3m_d1FD   <- 10^( predict(fit_model_srl3m, df_predict_srl_mag) )
+df_predict_srl_mag$magnitude_lim <-  1/c2_rw * (log10(examp_seis/sin(deg2rad(examp_dip_alt))) - c1_rw )
+df_predict_srl_mag$x1           <- df_predict_srl_mag$magnitude     -     pmin( log10(df_predict_srl_mag$rup_width_unbnd), log10(examp_seis/sin(deg2rad(examp_dip_alt))) )
+df_predict_srl_mag$x2           <- 3/2*df_predict_srl_mag$magnitude - 2*  pmin( log10(df_predict_srl_mag$rup_width_unbnd), log10(examp_seis/sin(deg2rad(examp_dip_alt))) ) 
+df_predict_srl_mag$x3           <- 3/4*df_predict_srl_mag$magnitude - 1/2*pmin( log10(df_predict_srl_mag$rup_width_unbnd), log10(examp_seis/sin(deg2rad(examp_dip_alt))) ) 
+df_predict_srl_mag$x2prime      <- 3/2*df_predict_srl_mag$magnitude -     pmin( log10(df_predict_srl_mag$rup_width_unbnd), log10(examp_seis/sin(deg2rad(examp_dip_alt))) ) - 1/2*pmin(df_predict_srl_mag$magnitude,df_predict_srl_mag$magnitude_lim)
+df_predict_srl_mag$x3prime      <- 3/4*df_predict_srl_mag$magnitude -     pmin( log10(df_predict_srl_mag$rup_width_unbnd), log10(examp_seis/sin(deg2rad(examp_dip_alt))) ) + 1/4*pmin(df_predict_srl_mag$magnitude,df_predict_srl_mag$magnitude_lim)
+
+df_predict_srl_mag$srl1m_d1FD     <- 10^( predict(fit_model_srl1m,     df_predict_srl_mag) )
+df_predict_srl_mag$srl2m_d1FD     <- 10^( predict(fit_model_srl2m,     df_predict_srl_mag) )
+df_predict_srl_mag$srl3m_d1FD     <- 10^( predict(fit_model_srl3m,     df_predict_srl_mag) )
+df_predict_srl_mag$srl2pm_d1FD    <- 10^( predict(fit_model_srl2pm,    df_predict_srl_mag) )
+df_predict_srl_mag$srl3pm_d1FD    <- 10^( predict(fit_model_srl3pm,    df_predict_srl_mag) )
+df_predict_srl_mag$srl1m_fxd_d1FD <- 10^( predict(fit_model_srl1m_fxd, df_predict_srl_mag) )
 
 #sigma
 df_predict_srl_mag$srl1m_d1_sig <- sigma(fit_model_srl1m) / ( 1 + (sig_scl-1) * sigmoid( 2.197225 * (log10(df_predict_srl_mag$rup_width_unbnd)-log10(15))/ width_scl ) )
@@ -700,54 +870,31 @@ df_predict_srl_mag$srl1m_d2_sig <- sigma(fit_model_srl1m) / ( 1 + (sig_scl-1) * 
 #remove columns
 df_predict_srl_mag <- subset(df_predict_srl_mag, select=-x1)
 df_predict_srl_mag <- subset(df_predict_srl_mag, select=-x2)
+df_predict_srl_mag <- subset(df_predict_srl_mag, select=-x3)
+df_predict_srl_mag <- subset(df_predict_srl_mag, select=-x2prime)
+df_predict_srl_mag <- subset(df_predict_srl_mag, select=-x3prime)
 df_predict_srl_mag <- subset(df_predict_srl_mag, select=-FN)
 df_predict_srl_mag <- subset(df_predict_srl_mag, select=-FR)
 df_predict_srl_mag <- subset(df_predict_srl_mag, select=-FD)
-
-## Comparison of different models
-fprintf('SRL Modeling:
-        \tModel0:\n\t\tLogLik: %.2f\n\t\tAIC: %.2f\n 
-        \tModel1:\n\t\tLogLik: %.2f\n\t\tAIC: %.2f\n
-        \tModel2:\n\t\tLogLik: %.2f\n\t\tAIC: %.2f\n
-        \tModel3:\n\t\tLogLik: %.2f\n\t\tAIC: %.2f\n
-        \tModel1 alt.:\n\t\tLogLik: %.2f\n\t\tAIC: %.2f\n\n',
-        logLik(fit_model_srl0m), AIC(fit_model_srl0m),
-        logLik(fit_model_srl1m), AIC(fit_model_srl1m),
-        logLik(fit_model_srl2m), AIC(fit_model_srl2m),
-        logLik(fit_model_srl3m), AIC(fit_model_srl3m),
-        logLik(fit_model_srl1m_alt), AIC(fit_model_srl1m_alt))
-
-#empirical sigma below and above width threshold of model 1
-sig_m1_wu <- sqrt(mean(df_FDHI_srl[!df_FDHI_srl$flag_wlim,'srl1m_res']^2))
-sig_m1_wl <- sqrt(mean(df_FDHI_srl[ df_FDHI_srl$flag_wlim,'srl1m_res']^2))
-fprintf('Standard Deviations:\n\tModel 1:\n\t\tEmpirical ratio for std of width limted to unbounded events is: %.2f',sig_m1_wu/sig_m1_wl)
-
-#save SRL regression coefficients
-write.csv(df_model_srl_mag_coef,  file=file.path(dir_out, 'model_coeffs_srl_mag.csv'))
-
-summary(fit_model_srl1m)
 ```
 
-
-```{r, srl_model_mag_coeffs, echo=FALSE}
-#coefficients
-kable(df_model_srl_mag_coef, 
-      col.names = c('Intercept','$\\mathbf{M}$ scaling','$X_1$ scaling','$X_2$ scaling','$X_3$ scaling','$F_N$','$F_R$','$F_D$','$\\sigma$'),  
-      caption = "Table 5. SRL Model Coefficients") %>%
-  kable_styling(latex_options = "hold_position")
-```
-
-Figure 6 presents the predictions of all candidate $SRL$ models for Strike-slip events with a $15 km$ and $20 km$ width of seismogenic zone.
+Figure 6 presents the predictions of all candidate $SRL$ models for Strike-slip events with a $15 km$ and $20 km$ width of seismogenic zone. Figure 7 presents the predictions for `model 1` and `model 1 fxd`, Figure 8 presents the predictions for `model 2` and `model 2'`, and Figure 9 presents the predictions for `model 3` and `model 3'`.
 
 ```{r fig_model_srl_mag, echo=FALSE, fig.cap="Figure 6. Prediction of candidate SRL Models for Strike-slip events with a 15km and 20km width of seismogenic zone"}
 pl_model_srl_mag <- ggplot() + geom_point(data=df_FDHI_srl, aes(x=magnitude, event_len), color='black') +
-                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl0m_d,      color=as.factor('Model 0: WC type')),             size=0.8) +
-                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d1,     color=as.factor('Model 1: D~sqrt(A), FD')),       size=0.8) +
-                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d2,     color=as.factor('Model 1: D~sqrt(A), FD')),       size=0.8, linetype="dashed") +
-                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl2m_d1,     color=as.factor('Model 2: D~W, FD')),             size=0.8) +
-                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl2m_d2,     color=as.factor('Model 2: D~W, FD')),             size=0.8, linetype="dashed") +
-                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl3m_d1,     color=as.factor('Model 3: D~L, FD')),             size=0.8) +
-                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl3m_d2,     color=as.factor('Model 3: D~L, FD')),             size=0.8, linetype="dashed") +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl0m_d,      color=as.factor("Model 0: WC type")),          size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d1,     color=as.factor("Model 1: D~sqrt(A), FD")),    size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d2,     color=as.factor("Model 1: D~sqrt(A), FD")),    size=0.8, linetype="dashed") +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl2m_d1,     color=as.factor("Model 2: D~W, FD")),          size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl2m_d2,     color=as.factor("Model 2: D~W, FD")),          size=0.8, linetype="dashed") +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl3m_d1,     color=as.factor("Model 3: D~L, FD")),          size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl3m_d2,     color=as.factor("Model 3: D~L, FD")),          size=0.8, linetype="dashed") +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl2pm_d1,    color=as.factor("Model 2': D~sqrt(A)-W, FD")), size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl2pm_d2,    color=as.factor("Model 2': D~sqrt(A)-W, FD")), size=0.8, linetype="dashed") +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl3pm_d1,    color=as.factor("Model 3': D~sqrt(A)-L, FD")), size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl3pm_d2,    color=as.factor("Model 3': D~sqrt(A)-L, FD")), size=0.8, linetype="dashed") +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_fxd_d1, color=as.factor("Model 1 fxd: D~sqrt(A), FD")), size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_fxd_d2, color=as.factor("Model 1 fxd: D~sqrt(A), FD")), size=0.8, linetype="dashed") +
                                scale_color_brewer(palette="Set1") +
                                scale_y_log10(breaks=trans_breaks("log10", function(x) 10^x), labels=trans_format("log10", math_format(10^.x))) +
                                annotation_logticks(sides = "y") + labs(x='Magnitude', y='Surface Rupture Length (km)',
@@ -760,9 +907,70 @@ pl_model_srl_mag <- ggplot() + geom_point(data=df_FDHI_srl, aes(x=magnitude, eve
 pl_model_srl_mag
 ```
 
-Figure 7 presents the predictions of ``model 1`` (preferred model) for the same Strike-slip events with a $15 km$ and $20 km$ width of seismogenic zone.
+```{r fig_model_srl_mag_m1, echo=FALSE, fig.cap="Figure 7. Prediction of SRL model 1 for Strike-slip events with a 15km and 20km width of seismogenic zone"}
+pl_model_srl_mag1 <- ggplot() + geom_point(data=df_FDHI_srl, aes(x=magnitude, event_len), color='black') +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl0m_d,      color=as.factor('Model 0: WC type')),                  size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d1,     color=as.factor('Model 1: D~sqrt(A), FD')),            size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d2,     color=as.factor('Model 1: D~sqrt(A), FD')),            size=0.8, linetype="dashed") +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_fxd_d1,     color=as.factor('Model 1: D~sqrt(A), FD, fixed')), size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_fxd_d2,     color=as.factor('Model 1: D~sqrt(A), FD, fixed')), size=0.8, linetype="dashed") +
+                               scale_color_brewer(palette="Set1") +
+                               scale_y_log10(breaks=trans_breaks("log10", function(x) 10^x), labels=trans_format("log10", math_format(10^.x))) +
+                               annotation_logticks(sides = "y") + labs(x='Magnitude', y='Surface Rupture Length (km)',
+                                                                       color='Model') + 
+                               theme(plot.title=element_text(size=size_title),  axis.title=element_text(size=size_title), 
+                                     axis.text.y=element_text(size=size_text),  axis.text.x=element_text(size=size_text),
+                                     legend.title=element_text(size=size_text), legend.text=element_text(size=size_text))
 
-```{r fig_model_srl_mag_pref, echo=FALSE, fig.cap="Figure 7. Prediction of preferred SRL Model for Strike-slip events with a 15km and 20km width of seismogenic zone"}
+
+pl_model_srl_mag1
+```
+
+```{r fig_model_srl_mag_m2, echo=FALSE, fig.cap="Figure 8. Prediction of SRL model 2 for Strike-slip events with a 15km and 20km width of seismogenic zone"}
+pl_model_srl_mag2 <- ggplot() + geom_point(data=df_FDHI_srl, aes(x=magnitude, event_len), color='black') +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl0m_d,      color=as.factor('Model 0: WC type')),             size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d1,     color=as.factor('Model 1: D~sqrt(A), FD')),       size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d2,     color=as.factor('Model 1: D~sqrt(A), FD')),       size=0.8, linetype="dashed") +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl2m_d1,     color=as.factor('Model 2: D~W, FD')),             size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl2m_d2,     color=as.factor('Model 2: D~W, FD')),             size=0.8, linetype="dashed") +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl2pm_d1,    color=as.factor('Model 2: D~sqrt(A)-W, FD')),             size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl2pm_d2,    color=as.factor('Model 2: D~sqrt(A)-W, FD')),             size=0.8, linetype="dashed") +
+                               scale_color_brewer(palette="Set1") +
+                               scale_y_log10(breaks=trans_breaks("log10", function(x) 10^x), labels=trans_format("log10", math_format(10^.x))) +
+                               annotation_logticks(sides = "y") + labs(x='Magnitude', y='Surface Rupture Length (km)',
+                                                                       color='Model') + 
+                               theme(plot.title=element_text(size=size_title),  axis.title=element_text(size=size_title), 
+                                     axis.text.y=element_text(size=size_text),  axis.text.x=element_text(size=size_text),
+                                     legend.title=element_text(size=size_text), legend.text=element_text(size=size_text))
+
+
+pl_model_srl_mag2
+```
+
+```{r fig_model_srl_mag_m3, echo=FALSE, fig.cap="Figure 9. Prediction of SRL model 3 for Strike-slip events with a 15km and 20km width of seismogenic zone"}
+pl_model_srl_mag3 <- ggplot() + geom_point(data=df_FDHI_srl, aes(x=magnitude, event_len), color='black') +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl0m_d,      color=as.factor('Model 0: WC type')),         size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d1,     color=as.factor('Model 1: D~sqrt(A), FD')),   size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d2,     color=as.factor('Model 1: D~sqrt(A), FD')),   size=0.8, linetype="dashed") +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl3m_d1,     color=as.factor('Model 3: D~L, FD')),         size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl3m_d2,     color=as.factor('Model 3: D~L, FD')),         size=0.8, linetype="dashed") +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl3pm_d1,    color=as.factor('Model 3: D~sqrt(A)-L, FD')), size=0.8) +
+                               geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl3pm_d2,    color=as.factor('Model 3: D~sqrt(A)-L, FD')), size=0.8, linetype="dashed") +
+                               scale_color_brewer(palette="Set1") +
+                               scale_y_log10(breaks=trans_breaks("log10", function(x) 10^x), labels=trans_format("log10", math_format(10^.x))) +
+                               annotation_logticks(sides = "y") + labs(x='Magnitude', y='Surface Rupture Length (km)',
+                                                                       color='Model') + 
+                               theme(plot.title=element_text(size=size_title),  axis.title=element_text(size=size_title), 
+                                     axis.text.y=element_text(size=size_text),  axis.text.x=element_text(size=size_text),
+                                     legend.title=element_text(size=size_text), legend.text=element_text(size=size_text))
+
+
+pl_model_srl_mag3
+```
+
+Figure 10 presents the predictions of `model 1 fxd` (preferred model) for the same Strike-slip events with a $15 km$ and $20 km$ width of seismogenic zone.
+
+```{r fig_model_srl_mag_pref, echo=FALSE, fig.cap="Figure 10. Prediction of preferred SRL Model for Strike-slip events with a 15km and 20km width of seismogenic zone"}
 df_FDHI_srl4plot <- subset(df_FDHI_srl, sof==0 & seis_depth<25)
 df_FDHI_srl4plot$bin_w <- 0
 df_FDHI_srl4plot[df_FDHI_srl4plot$seis_depth<=17.5,'bin_w'] <- 1
@@ -770,8 +978,8 @@ df_FDHI_srl4plot[df_FDHI_srl4plot$seis_depth>17.5,'bin_w'] <- 2
 df_FDHI_srl4plot$bin_w <- as.factor(df_FDHI_srl4plot$bin_w)
 
 pl_model_srl_mag_pref <- ggplot() + geom_point(data=df_FDHI_srl4plot, aes(x=magnitude, event_len, color=style2, size=style2, shape=bin_w)) +
-                                    geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d1, linetype=as.factor(1)), size=0.8) +
-                                    geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d2, linetype=as.factor(2)), size=0.8) +
+                                    geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_fxd_d1, linetype=as.factor(1)), size=0.8) +
+                                    geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_fxd_d2, linetype=as.factor(2)), size=0.8) +
                                     scale_color_manual(values=color_sof, breaks=c("Normal","Reverse","Strike-Slip")) +
                                     scale_size_manual(values=c(1.4,2,2.4), breaks=c("Normal","Reverse","Strike-Slip")) +
                                     scale_shape_manual(values=c(16,17), labels=c("\u2264 17.5 km","> 17.5 km")) +
@@ -788,38 +996,37 @@ pl_model_srl_mag_pref <- ggplot() + geom_point(data=df_FDHI_srl4plot, aes(x=magn
 pl_model_srl_mag_pref
 ```
 
-Figure 8 presents the predictions of ``model 1`` for Strike-slip and Dip-slip events with a  $15 km$ width of seismogenic zone.
+Figure 11 presents the predictions of `model 1 fxd` for Strike-slip and Dip-slip events with a $15 km$ width of seismogenic zone.
 
-```{r fig_model_srl_mag_pref_FD, echo=FALSE, fig.cap="Figure 8. Prediction of preferred SRL Model for Strike-slip and Dip-slip events and 15km width of seismogenic zone"}
+```{r fig_model_srl_mag_pref_FD, echo=FALSE, fig.cap="Figure 11. Prediction of preferred SRL Model for Strike-slip and Dip-slip events and 15km width of seismogenic zone"}
 pl_model_srl_mag_pref_FD <- ggplot() + geom_point(data=subset(df_FDHI_srl, sof>=0 & seis_depth<25), aes(x=magnitude, event_len, color=style2, size=style2)) +
-                                    geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d1,   linetype=as.factor(1)), size=0.8) +
-                                    geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d1FD, linetype=as.factor(2)), size=0.8) +
-                                    scale_color_manual(values=color_sof, breaks=c("Normal","Reverse","Strike-Slip")) +
-                                    scale_size_manual(values=c(1.4,2,2.4), breaks=c("Normal","Reverse","Strike-Slip")) +
-                                    scale_linetype_manual(values=c('solid','dotdash'), breaks=as.factor(c(1,2)), labels=c('Strike-Slip','Reverse')) +
-                                    scale_y_log10(breaks=trans_breaks("log10", function(x) 10^x), labels=trans_format("log10", math_format(10^.x))) +
-                                    annotation_logticks(sides = "y") + labs(x='Magnitude', y='Surface Rupture Length (km)',
-                                                                            color='Fault Style', size='Fault Style',
-                                                                            linetype='Model') +
-                                    theme(plot.title=element_text(size=size_title),  axis.title=element_text(size=size_title), 
-                                          axis.text.y=element_text(size=size_text),  axis.text.x=element_text(size=size_text),
-                                          legend.title=element_text(size=size_text), legend.text=element_text(size=size_text))
+                                       geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_fxd_d1,   linetype=as.factor(1)), size=0.8) +
+                                       geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_fxd_d1FD, linetype=as.factor(2)), size=0.8) +
+                                       scale_color_manual(values=color_sof, breaks=c("Normal","Reverse","Strike-Slip")) +
+                                       scale_size_manual(values=c(1.4,2,2.4), breaks=c("Normal","Reverse","Strike-Slip")) +
+                                       scale_linetype_manual(values=c('solid','dotdash'), breaks=as.factor(c(1,2)), labels=c('Strike-Slip','Reverse')) +
+                                       scale_y_log10(breaks=trans_breaks("log10", function(x) 10^x), labels=trans_format("log10", math_format(10^.x))) +
+                                       annotation_logticks(sides = "y") + labs(x='Magnitude', y='Surface Rupture Length (km)',
+                                                                               color='Fault Style', size='Fault Style',
+                                                                               linetype='Model') +
+                                       theme(plot.title=element_text(size=size_title),  axis.title=element_text(size=size_title), 
+                                             axis.text.y=element_text(size=size_text),  axis.text.x=element_text(size=size_text),
+                                             legend.title=element_text(size=size_text), legend.text=element_text(size=size_text))
 
 pl_model_srl_mag_pref_FD
 
 ```
 
-Figure 9 compares the predictions of ``model 0`` and ``model 1`` for Strike-slip events with a $15 km$ and $20 km$ width of seismogenic zone.
-Both models have similar scaling for unbounded ruptures, but ``model 1`` also captures the change in scaling for width-limited ruptures leading to an overall better predictive performance. 
+Figure 12 compares the predictions of `model 0` and `model 1 fxd` for Strike-slip events with a $15 km$ and $20 km$ width of seismogenic zone. Both models have similar scaling for unbounded ruptures, but `model 1 fxd` also captures the change in scaling for width-limited ruptures leading to an overall better predictive performance.
 
-```{r fig_model_srl_mag_wlim, echo=FALSE, fig.cap="Figure 9. Prediction of Candidate SRL Models for Strike-slip events with a 15km and 20km width of seismogenic zone. Comparison with unbounded and width-limited events"}
+```{r fig_model_srl_mag_wlim, echo=FALSE, fig.cap="Figure 12. Prediction of Candidate SRL Models for Strike-slip events with a 15km and 20km width of seismogenic zone. Comparison with unbounded and width-limited events"}
 
 pl_model_srl_mag_wlim <- ggplot() + geom_point(data=df_FDHI_srl, aes(x=magnitude, event_len, color=flag_wlim, shape=flag_wlim), size=2) +
                                     geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl0m_d,      linetype=as.factor(0)),       size=0.8) +
-                                    geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d1,     linetype=as.factor(1)), size=0.8) +
-                                    geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d2,     linetype=as.factor(1)), size=0.8) +
-                                    scale_shape_manual(values=shape_width_flag, breaks=c(FALSE, TRUE), labels=c("Unbounded", "Width Limited")) +
-                                    scale_color_manual(values=color_width_flag, breaks=c(FALSE, TRUE), labels=c("Unbounded", "Width Limited")) +
+                                    geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_fxd_d1,     linetype=as.factor(1)), size=0.8)   +
+                                    geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_fxd_d2,     linetype=as.factor(1)), size=0.8)   +
+                                    scale_shape_manual(values=shape_width_flag, breaks=c(FALSE, TRUE), labels=c("Unbounded", "Width Limited"))  +
+                                    scale_color_manual(values=color_width_flag, breaks=c(FALSE, TRUE), labels=c("Unbounded", "Width Limited"))  +
                                     scale_linetype_manual(values=c('dashed','solid'), breaks=c(as.factor(0), as.factor(1)),
                                                           labels=c('Model 0\nWC type', 'Model 1\nD~sqrt(A)')) +
                                     scale_y_log10(breaks=trans_breaks("log10", function(x) 10^x), labels=trans_format("log10", math_format(10^.x))) +
@@ -832,13 +1039,16 @@ pl_model_srl_mag_wlim <- ggplot() + geom_point(data=df_FDHI_srl, aes(x=magnitude
 pl_model_srl_mag_wlim
 ```
 
-Figure 10 presents the regression residuals versus $\mathbf{M}$ for all candidate $SRL$ models.
+Figure 13 presents the regression residuals versus $\mathbf{M}$ for all candidate $SRL$ models.
 
-```{r fig_models_srl_res_mag, echo=FALSE, fig.cap="Figure 10. Comparison Residuals of all candidate Models"}
-pl_model_srl_res_mag <- ggplot() + geom_point(data=df_FDHI_srl, aes(x=magnitude, y=srl0m_res,     color=as.factor('Model 0: WC type'))) +
-                                   geom_point(data=df_FDHI_srl, aes(x=magnitude, y=srl1m_res,     color=as.factor('Model 1: D~sqrt(A)'))) +
-                                   geom_point(data=df_FDHI_srl, aes(x=magnitude, y=srl2m_res,     color=as.factor('Model 2: D~W'))) +
-                                   geom_point(data=df_FDHI_srl, aes(x=magnitude, y=srl3m_res,     color=as.factor('Model 3: D~L'))) +
+```{r fig_models_srl_res_mag, echo=FALSE, fig.cap="Figure 13. Comparison Residuals of all candidate Models"}
+pl_model_srl_res_mag <- ggplot() + geom_point(data=df_FDHI_srl, aes(x=magnitude, y=srl0m_res,     color=as.factor("Model 0: WC type"))) +
+                                   geom_point(data=df_FDHI_srl, aes(x=magnitude, y=srl1m_res,     color=as.factor("Model 1: D~sqrt(A)"))) +
+                                   geom_point(data=df_FDHI_srl, aes(x=magnitude, y=srl2m_res,     color=as.factor("Model 2: D~W"))) +
+                                   geom_point(data=df_FDHI_srl, aes(x=magnitude, y=srl3m_res,     color=as.factor("Model 3: D~L"))) +
+                                   geom_point(data=df_FDHI_srl, aes(x=magnitude, y=srl2pm_res,    color=as.factor("Model 2': D~sqrt(A)-W"))) +
+                                   geom_point(data=df_FDHI_srl, aes(x=magnitude, y=srl3pm_res,    color=as.factor("Model 3': D~sqrt(A)L"))) +
+                                   geom_point(data=df_FDHI_srl, aes(x=magnitude, y=srl1m_fxd_res, color=as.factor("Model 1 fxd: D~sqrt(A)"))) +
                                    annotation_logticks(sides = "l") + labs(x='Magnitude', y='Surface Rupture Length Residuals', color='Model') + 
                                    scale_color_brewer(palette="Set1") + ylim(-.8, 0.8) +
                                    theme(plot.title=element_text(size=size_title),  axis.title=element_text(size=size_title), 
@@ -847,9 +1057,28 @@ pl_model_srl_res_mag <- ggplot() + geom_point(data=df_FDHI_srl, aes(x=magnitude,
 pl_model_srl_res_mag
 ```
 
-Figure 11 shows the ``model 0`` regression residuals versus magnitude.
+Figure 14 shows the regression residuals versus magnitude of `model 1 fxd` (preferred model).
 
-```{r fig_model0_srl_res_mag, echo=FALSE, fig.cap="Figure 11. Linear model (Model 0, WC type) Residuals versus Magnitude"}
+```{r fig_model1_fxd_srl_res_mag, echo=FALSE, fig.cap="Figure 14. Prefered Model (Model 1, D~sqrt(A), fixed slope) Residuals versus Magnitude"}
+pl_model_srl_res_mag_m1_fxd <- ggplot(data=df_FDHI_srl, aes(x=magnitude, y=srl1m_fxd_res)) + 
+                               geom_point(aes(color=flag_wlim, shape=flag_wlim), size=2) +
+                               geom_hline(yintercept=0,linetype="dashed") +
+                               scale_shape_manual(values=shape_width_flag, breaks=c(FALSE, TRUE), labels=c("Unbounded", "Width Limited")) +
+                               scale_color_manual(values=color_width_flag, breaks=c(FALSE, TRUE), labels=c("Unbounded", "Width Limited")) +
+                               annotation_logticks(sides = "y") + labs(x='Magnitude', y='Surface Rupture Length Residuals', 
+                                                                       linetype='Model', color='Events', shape='Events') +
+                               scale_y_continuous(breaks=c(-0.75,-0.5,-0.25,0,0.25,0.5,0.75), limits=c(-0.8,0.8)) + 
+                               theme(legend.position = c(0.85, 0.15), legend.background = element_rect(size=0.1, linetype="solid", colour='black')) +
+                               theme(plot.title=element_text(size=size_title),  axis.title=element_text(size=size_title), 
+                                     axis.text.y=element_text(size=size_text),  axis.text.x=element_text(size=size_text),
+                                     legend.title=element_text(size=size_text), legend.text=element_text(size=size_text))
+
+pl_model_srl_res_mag_m1_fxd
+```
+
+Figure 15 shows the `model 0` regression residuals versus magnitude.
+
+```{r fig_model0_srl_res_mag, echo=FALSE, fig.cap="Figure 15. Linear model (Model 0, WC type) Residuals versus Magnitude"}
 pl_model_srl_res_mag_m0 <- ggplot(data=df_FDHI_srl, aes(x=magnitude, y=srl0m_res)) + 
                            geom_point(aes(color=flag_wlim, shape=flag_wlim), size=2) +
                            geom_hline(yintercept=0,linetype="dashed") +
@@ -858,7 +1087,7 @@ pl_model_srl_res_mag_m0 <- ggplot(data=df_FDHI_srl, aes(x=magnitude, y=srl0m_res
                            annotation_logticks(sides = "y") + labs(x='Magnitude', y='Surface Rupture Length Residuals', 
                                                                    linetype='Model', color='Events', shape='Events') +
                            scale_y_continuous(breaks=c(-0.75,-0.5,-0.25,0,0.25,0.5,0.75), limits=c(-0.8,0.8)) + 
-                           theme(legend.position = c(0.75, 0.85), legend.background = element_rect(size=0.1, linetype="solid", colour='black')) +
+                           theme(legend.position = c(0.78, 0.15), legend.background = element_rect(size=0.1, linetype="solid", colour='black')) +
                            theme(plot.title=element_text(size=size_title),  axis.title=element_text(size=size_title), 
                                  axis.text.y=element_text(size=size_text),  axis.text.x=element_text(size=size_text),
                                  legend.title=element_text(size=size_text), legend.text=element_text(size=size_text))
@@ -866,10 +1095,10 @@ pl_model_srl_res_mag_m0 <- ggplot(data=df_FDHI_srl, aes(x=magnitude, y=srl0m_res
 pl_model_srl_res_mag_m0
 ```
 
-Figure 12 shows the ``model 1`` regression residuals versus magnitude.
+Figure 16 shows the `model 1` regression residuals versus magnitude.
 
-```{r fig_model1_srl_res_mag, echo=FALSE, fig.cap="Figure 12. Prefered Model (Model 1, D~sqrt(A)) Residuals versus Magnitude"}
-pl_model_srl_res_mag_m1 <- ggplot(data=df_FDHI_srl, aes(x=magnitude, y=srl1m_res)) + 
+```{r fig_model1_srl_res_mag, echo=FALSE, fig.cap="Figure 16.  Candidate Model (Model 1, D~sqrt(A)) Residuals versus Magnitude"}
+pl_model_srl_res_mag_m1 <- ggplot(data=df_FDHI_srl, aes(x=magnitude, y=srl1m_fxd_res)) + 
                            geom_point(aes(color=flag_wlim, shape=flag_wlim), size=2) +
                            geom_hline(yintercept=0,linetype="dashed") +
                            scale_shape_manual(values=shape_width_flag, breaks=c(FALSE, TRUE), labels=c("Unbounded", "Width Limited")) +
@@ -885,10 +1114,9 @@ pl_model_srl_res_mag_m1 <- ggplot(data=df_FDHI_srl, aes(x=magnitude, y=srl1m_res
 pl_model_srl_res_mag_m1
 ```
 
+Figure 17 shows the `model 2` regression residuals versus magnitude.
 
-Figure 13 shows the ``model 2`` regression residuals versus magnitude.
-
-```{r fig_model2_srl_res_mag, echo=FALSE, fig.cap="Figure 13. Prefered Model (Model 2, D~W) Residuals versus Magnitude"}
+```{r fig_model2_srl_res_mag, echo=FALSE, fig.cap="Figure 17. Candidate Model (Model 2, D~W) Residuals versus Magnitude"}
 pl_model_srl_res_mag_m2 <- ggplot(data=df_FDHI_srl, aes(x=magnitude, y=srl2m_res)) + 
                            geom_point(aes(color=flag_wlim, shape=flag_wlim), size=2) +
                            geom_hline(yintercept=0,linetype="dashed") +
@@ -905,10 +1133,9 @@ pl_model_srl_res_mag_m2 <- ggplot(data=df_FDHI_srl, aes(x=magnitude, y=srl2m_res
 pl_model_srl_res_mag_m2
 ```
 
+Figure 18 shows the `model 3` regression residuals versus magnitude.
 
-Figure 14 shows the ``model 3`` regression residuals versus magnitude.
-
-```{r fig_model3_srl_res_mag, echo=FALSE, fig.cap="Figure 14. Prefered Model (Model 3, D~L) Residuals versus Magnitude"}
+```{r fig_model3_srl_res_mag, echo=FALSE, fig.cap="Figure 18. Candidate Model (Model 3, D~L) Residuals versus Magnitude"}
 pl_model_srl_res_mag_m3 <- ggplot(data=df_FDHI_srl, aes(x=magnitude, y=srl3m_res)) + 
                            geom_point(aes(color=flag_wlim, shape=flag_wlim), size=2) +
                            geom_hline(yintercept=0,linetype="dashed") +
@@ -925,35 +1152,82 @@ pl_model_srl_res_mag_m3 <- ggplot(data=df_FDHI_srl, aes(x=magnitude, y=srl3m_res
 pl_model_srl_res_mag_m3
 ```
 
+Figure 19 shows the `model 2'` regression residuals versus magnitude.
 
-A rupture-width transition parameter $\delta$ is defined as $\delta = \log_{10}(W_{unb}) - \log_{10}(W_{lim})$; $W_{unb}$ is the theoretical rupture width for an infinite seismogenic zone estimated from the first leg of `model w1` ($\log_{10}(W_{unb}) = \beta_1 \mathbf{M} + \beta_2$).
-A negative value of $\delta$ corresponds to a unbounded rupture, whereas a positive corresponds to a width-limited rupture. 
-Figure 15 shows the ``model 1`` regression residuals versus $\delta$. 
-The solid black lines correspond to the rupture-width transition dependent standard deviation. 
+```{r fig_model2p_srl_res_mag, echo=FALSE, fig.cap="Figure 19. Candidate Model (Model 2', D~sqrt(A)-L) Residuals versus Magnitude"}
+pl_model_srl_res_mag_m2p <- ggplot(data=df_FDHI_srl, aes(x=magnitude, y=srl2pm_res)) + 
+                            geom_point(aes(color=flag_wlim, shape=flag_wlim), size=2) +
+                            geom_hline(yintercept=0,linetype="dashed") +
+                            scale_shape_manual(values=shape_width_flag, breaks=c(FALSE, TRUE), labels=c("Unbounded", "Width Limited")) +
+                            scale_color_manual(values=color_width_flag, breaks=c(FALSE, TRUE), labels=c("Unbounded", "Width Limited")) +
+                            annotation_logticks(sides = "y") + labs(x='Magnitude', y='Surface Rupture Length Residuals', 
+                                                                    linetype='Model', color='Events', shape='Events') +
+                            scale_y_continuous(breaks=c(-0.75,-0.5,-0.25,0,0.25,0.5,0.75), limits=c(-0.8,0.8)) + 
+                            theme(legend.position = c(0.85, 0.15), legend.background = element_rect(size=0.1, linetype="solid", colour='black')) +
+                            theme(plot.title=element_text(size=size_title),  axis.title=element_text(size=size_title), 
+                                  axis.text.y=element_text(size=size_text),  axis.text.x=element_text(size=size_text),
+                                  legend.title=element_text(size=size_text), legend.text=element_text(size=size_text))
 
-```{r fig_model6_srl_res_width, echo=FALSE, fig.cap="Figure 15. Prefered Model (Model 1, D~sqrt(A)) Residuals versus Width transition"}
-df_sig_model <- data.frame(delta_W = linspace(-1.25, 0.5))
-df_sig_model$model0_sig <- df_model_srl_mag_coef['model_srl1','sigma'] / ( 1 + (sig_scl-1) * sigmoid( 2.197225 * (df_sig_model$delta_W)/ width_scl ) )
+pl_model_srl_res_mag_m2p
+```
 
-pl_model_srl_res_width_m1 <- ggplot(data=df_FDHI_srl, aes(x=log10(rup_width_unbnd)-log10(seis_width), y=srl1m_res)) + 
-                             geom_point(aes(color=flag_wlim, shape=flag_wlim), size=2) +
-                             geom_hline(yintercept=0,linetype="dashed") +
-                             geom_line(data=df_sig_model, aes(x=delta_W, y= model0_sig, 
-                                                                    linetype=as.factor('Mag Dependent\nStandard Dev')), size=0.8) +
-                             geom_line(data=df_sig_model, aes(x=delta_W, y=-model0_sig), size=0.8) +
-                             scale_shape_manual(values=shape_width_flag, breaks=c(FALSE, TRUE), labels=c("Unbounded", "Width Limited")) +
-                             scale_color_manual(values=color_width_flag, breaks=c(FALSE, TRUE), labels=c("Unbounded", "Width Limited")) +
-                             annotation_logticks(sides = "x") + labs(x='Rupture Width Transition Parameter (\u03B4_W)', 
-                                                                     y='Surface Rupture Length Residuals', 
-                                                                     linetype=NULL, color='Events', shape='Events') +
-                             scale_y_continuous(breaks=c(-0.75,-0.5,-0.25,0,0.25,0.5,0.75), limits=c(-0.8,0.8)) + 
-                             theme(legend.position = c(0.73, 0.90), legend.box = "horizontal",
-                                   legend.background = element_rect(size=0.1, linetype="solid", colour='black')) + guides(color="none", shape="none") +
+Figure 20 shows the `model 3'` regression residuals versus magnitude.
+
+```{r fig_model3p_srl_res_mag, echo=FALSE, fig.cap="Figure 20. Candidate Model (Model 3', D~sqrt(A)-L) Residuals versus Magnitude"}
+pl_model_srl_res_mag_m3p <- ggplot(data=df_FDHI_srl, aes(x=magnitude, y=srl3pm_res)) + 
+                            geom_point(aes(color=flag_wlim, shape=flag_wlim), size=2) +
+                            geom_hline(yintercept=0,linetype="dashed") +
+                            scale_shape_manual(values=shape_width_flag, breaks=c(FALSE, TRUE), labels=c("Unbounded", "Width Limited")) +
+                            scale_color_manual(values=color_width_flag, breaks=c(FALSE, TRUE), labels=c("Unbounded", "Width Limited")) +
+                            annotation_logticks(sides = "y") + labs(x='Magnitude', y='Surface Rupture Length Residuals', 
+                                                                    linetype='Model', color='Events', shape='Events') +
+                            scale_y_continuous(breaks=c(-0.75,-0.5,-0.25,0,0.25,0.5,0.75), limits=c(-0.8,0.8)) + 
+                            theme(legend.position = c(0.85, 0.15), legend.background = element_rect(size=0.1, linetype="solid", colour='black')) +
+                            theme(plot.title=element_text(size=size_title),  axis.title=element_text(size=size_title), 
+                                  axis.text.y=element_text(size=size_text),  axis.text.x=element_text(size=size_text),
+                                  legend.title=element_text(size=size_text), legend.text=element_text(size=size_text))
+
+pl_model_srl_res_mag_m3p
+```
+
+Figure 21 compares the residuals for the regression models that use the model 1 functional from with and without a fixed slope.
+
+```{r fig_model1_cmp_srl_res_mag, echo=FALSE, fig.cap="Figure 21. Comparison Residuals of model 1 functional form models"}
+pl_model1_cmp_srl_res_mag <- ggplot() + geom_point(data=df_FDHI_srl, aes(x=magnitude, y=srl1m_res,  color=as.factor('Model 1: D~sqrt(A)'))) +
+                             geom_point(data=df_FDHI_srl, aes(x=magnitude, y=srl1m_fxd_res,         color=as.factor('Model 1: D~sqrt(A), fixed'))) +
+                             annotation_logticks(sides = "l") + labs(x='Magnitude', y='Surface Rupture Length Residuals', color='Model') + 
+                             scale_color_brewer(palette="Set1") + ylim(-.8, 0.8) +
                              theme(plot.title=element_text(size=size_title),  axis.title=element_text(size=size_title), 
                                    axis.text.y=element_text(size=size_text),  axis.text.x=element_text(size=size_text),
                                    legend.title=element_text(size=size_text), legend.text=element_text(size=size_text))
+pl_model1_cmp_srl_res_mag
+```
 
-show(pl_model_srl_res_width_m1)
+A rupture-width transition parameter $\delta$ is defined as $\delta = \log_{10}(W_{unb}) - \log_{10}(W_{lim})$; $W_{unb}$ is the theoretical rupture width for an infinite seismogenic zone estimated from the first leg of `model w1` ($\log_{10}(W_{unb}) = \beta_1 \mathbf{M} + \beta_2$). A negative value of $\delta$ corresponds to a unbounded rupture, whereas a positive corresponds to a width-limited rupture. Figure 22 shows the `model 1 fxd` regression residuals versus $\delta$. The solid black lines correspond to the rupture-width transition dependent standard deviation.
+
+```{r fig_model1_srl_res_width, echo=FALSE, fig.cap="Figure 22 Prefered Model (Model 1, D~sqrt(A), fixed slope) Residuals versus Width transition"}
+df_sig_model <- data.frame(delta_W = linspace(-1.25, 0.5))
+df_sig_model$sig <- df_model_srl_mag_coef['model_srl1_fxd','sigma'] / ( 1 + (sig_scl-1) * sigmoid( 2.197225 * (df_sig_model$delta_W)/ width_scl ) )
+
+pl_model_srl_res_width_m1_fxd <- ggplot(data=df_FDHI_srl, aes(x=log10(rup_width_unbnd)-log10(seis_width), y=srl1m_fxd_res)) + 
+                                 geom_point(aes(color=flag_wlim, shape=flag_wlim), size=2) +
+                                 geom_hline(yintercept=0,linetype="dashed") +
+                                 geom_line(data=df_sig_model, aes(x=delta_W, y=sig, 
+                                                                  linetype=as.factor('Mag Dependent\nStandard Dev')), size=0.8) +
+                                 geom_line(data=df_sig_model, aes(x=delta_W, y=-sig), size=0.8) +
+                                 scale_shape_manual(values=shape_width_flag, breaks=c(FALSE, TRUE), labels=c("Unbounded", "Width Limited")) +
+                                 scale_color_manual(values=color_width_flag, breaks=c(FALSE, TRUE), labels=c("Unbounded", "Width Limited")) +
+                                 annotation_logticks(sides = "x") + labs(x='Rupture Width Transition Parameter (\u03B4_W)', 
+                                                                         y='Surface Rupture Length Residuals', 
+                                                                         linetype=NULL, color='Events', shape='Events') +
+                                 scale_y_continuous(breaks=c(-0.75,-0.5,-0.25,0,0.25,0.5,0.75), limits=c(-0.8,0.8)) + 
+                                 theme(legend.position = c(0.73, 0.90), legend.box = "horizontal",
+                                       legend.background = element_rect(size=0.1, linetype="solid", colour='black')) + guides(color="none", shape="none") +
+                                 theme(plot.title=element_text(size=size_title),  axis.title=element_text(size=size_title), 
+                                       axis.text.y=element_text(size=size_text),  axis.text.x=element_text(size=size_text),
+                                       legend.title=element_text(size=size_text), legend.text=element_text(size=size_text))
+
+show(pl_model_srl_res_width_m1_fxd)
 ```
 
 ```{r save_fig_model, echo=FALSE}
@@ -963,25 +1237,17 @@ ggsave(file.path(dir_fig,'models_srl_mag_wlim.png'),    plot=pl_model_srl_mag_wl
 ggsave(file.path(dir_fig,'models_srl_mag_pref.png'),    plot=pl_model_srl_mag_pref,                                device='png', width=5.9,   height=4)
 ggsave(file.path(dir_fig,'models_srl_mag_pref_FD.png'), plot=pl_model_srl_mag_pref_FD,                             device='png', width=5.9,   height=4)
 #residuals
-ggsave(file.path(dir_fig,'model0_srl_res_mag.png'),    plot=pl_model_srl_res_mag_m0,                               device='png', width=4.5, height=4)
-ggsave(file.path(dir_fig,'model1_srl_res_mag.png'),    plot=pl_model_srl_res_mag_m1+theme(legend.position="none"), device='png', width=4.5, height=4)
-ggsave(file.path(dir_fig,'model2_srl_res_mag.png'),    plot=pl_model_srl_res_mag_m2+theme(legend.position="none"), device='png', width=4.5, height=4)
-ggsave(file.path(dir_fig,'model3_srl_res_mag.png'),    plot=pl_model_srl_res_mag_m3+theme(legend.position="none"), device='png', width=4.5, height=4)
-ggsave(file.path(dir_fig,'model1_srl_res_width.png'),  plot=pl_model_srl_res_width_m1, device='png', width=4.5, height=4)
+ggsave(file.path(dir_fig,'model0_srl_res_mag.png'),        plot=pl_model_srl_res_mag_m0,                                   device='png', width=4.5, height=4)
+ggsave(file.path(dir_fig,'model1_fxd_srl_res_mag.png'),    plot=pl_model_srl_res_mag_m1_fxd+theme(legend.position="none"), device='png', width=4.5, height=4)
+ggsave(file.path(dir_fig,'model1_fxd_srl_res_width.png'),  plot=pl_model_srl_res_width_m1_fxd,                             device='png', width=4.5, height=4)
 
 ```
 
 ### Comparison With Existing Models
 
-Figure 16 compares the preferred model with existing $SLR$ relationships.
-WC94 All and WC94 SS correspond to the Wells and Coppersmith (1994) $SRL ~ \mathbf{M}$ scaling relationships for All types of slip and Strike-slip events.
-WY15 OLS and WY15 Deming correspond to the Wells and Youngs (2015) $SRL ~ \mathbf{M}$ scaling relationships using ordinary-least-squares and errors-in-variables regression models. 
-L10 DS, L10 SS, and L10 SRC correspond to the Leonard (2010) $SRL ~ \mathbf{M}$ scaling relationships for Dip-slip, Strike-slip, and Stable-Continental events.
-The proposed model is in agreement with the existing models over different magnitude ranges. 
-It is in good agreement with the Leonard (2010) scaling relationship for small to moderate size events, and in good agreement with the Wells and Coppersmith (1994) and Wells and Youngs (2015) scaling relationships at large size events. 
-A potential reason for the agreement at different magnitude ranges is that the dataset used by Leonard (2010) was primarily composed of events ranging from $\mathbf{M}~5$ to $7$, while datasets used by Wells and Coppersmith (1994) and  Wells and Youngs (2015) was primarily composed of events ranging from $\mathbf{M}~6$ to $7.8$.
+Figure 23 compares the preferred model with existing $SLR$ relationships. WC94 All and WC94 SS correspond to the Wells and Coppersmith (1994) $SRL ~ \mathbf{M}$ scaling relationships for All types of slip and Strike-slip events. WY15 OLS and WY15 Deming correspond to the Wells and Youngs (2015) $SRL ~ \mathbf{M}$ scaling relationships using ordinary-least-squares and errors-in-variables regression models. L10 DS, L10 SS, and L10 SRC correspond to the Leonard (2010) $SRL ~ \mathbf{M}$ scaling relationships for Dip-slip, Strike-slip, and Stable-Continental events. The proposed model is in agreement with the existing models over different magnitude ranges. It is in good agreement with the Leonard (2010) scaling relationship for small to moderate size events, and in good agreement with the Wells and Coppersmith (1994) and Wells and Youngs (2015) scaling relationships at large size events. A potential reason for the agreement at different magnitude ranges is that the dataset used by Leonard (2010) was primarily composed of events ranging from $\mathbf{M}~5$ to $7$, while datasets used by Wells and Coppersmith (1994) and Wells and Youngs (2015) was primarily composed of events ranging from $\mathbf{M}~6$ to $7.8$.
 
-```{r, srl_model_mag_cmp, echo=FALSE, fig.cap="Figure 16. Comparison Preferred Model (Model 1, D~sqrt(A)) with existing SLR relationships"}
+```{r, srl_model_mag_cmp, echo=FALSE, fig.cap="Figure 23. Comparison Preferred Model (Model 1, D~sqrt(A)) with existing SLR relationships"}
 
 ## Prediction Existing Models
 #initialize dataframe
@@ -1005,33 +1271,32 @@ df_other_models$srl_l10_src <- 10^( 1/1.67*(-4.32 + df_other_models$magnitude) )
 
 
 #figures predictions
-pl_model_cmp_m1 <- ggplot() + geom_line(data=df_other_models,    aes(x=magnitude, y=srl_wc94_all,    linetype=as.factor('Existing'), color=as.factor('WC94 All')),    size=0.8) +
-                              geom_line(data=df_other_models,    aes(x=magnitude, y=srl_wc94_ss,     linetype=as.factor('Existing'), color=as.factor('WC94 SS')),     size=0.8) +
-                              geom_line(data=df_other_models,    aes(x=magnitude, y=srl_wy15_ols,    linetype=as.factor('Existing'), color=as.factor('WY15 OLS')),    size=0.8) +
-                              geom_line(data=df_other_models,    aes(x=magnitude, y=srl_wy15_deming, linetype=as.factor('Existing'), color=as.factor('WY15 Deming')), size=0.8) +
-                              geom_line(data=df_other_models,    aes(x=magnitude, y=srl_l10_ds,      linetype=as.factor('Existing'), color=as.factor('L10 DS')),      size=0.8) +
-                              geom_line(data=df_other_models,    aes(x=magnitude, y=srl_l10_ss,      linetype=as.factor('Existing'), color=as.factor('L10 SS')),      size=0.8) +
-                              geom_line(data=df_other_models,    aes(x=magnitude, y=srl_l10_src,     linetype=as.factor('Existing'), color=as.factor('L10 SRC')),     size=0.8) +
-                              geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d1, linetype=as.factor('New, Model 1')), size=0.8) +
-                              geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_d2, linetype=as.factor('New, Model 1')), size=0.8) +
-                              scale_y_log10(breaks=trans_breaks("log10", function(x) 10^x),  labels=trans_format("log10", math_format(10^.x)) ) +
-                              scale_linetype_manual(values=c("dashed", "solid"))+
-                              annotation_logticks(sides = "l") + labs(x='Magnitude', y='Surface Rupture Length (km)', color=NULL, linetype='Models') +
-                              guides(colour = guide_legend(order = 2), linetype = guide_legend(order = 1)) +
-                              theme(plot.title=element_text(size=size_title),  axis.title=element_text(size=size_title), 
-                                    axis.text.y=element_text(size=size_text),  axis.text.x=element_text(size=size_text),
-                                    legend.title=element_text(size=size_text), legend.text=element_text(size=size_text))
-pl_model_cmp_m1
+pl_model_cmp_m1_fxd <- ggplot() + geom_line(data=df_other_models,    aes(x=magnitude, y=srl_wc94_all,    linetype=as.factor('Existing'), color=as.factor('WC94 All')),    size=0.8) +
+                                  geom_line(data=df_other_models,    aes(x=magnitude, y=srl_wc94_ss,     linetype=as.factor('Existing'), color=as.factor('WC94 SS')),     size=0.8) +
+                                  geom_line(data=df_other_models,    aes(x=magnitude, y=srl_wy15_ols,    linetype=as.factor('Existing'), color=as.factor('WY15 OLS')),    size=0.8) +
+                                  geom_line(data=df_other_models,    aes(x=magnitude, y=srl_wy15_deming, linetype=as.factor('Existing'), color=as.factor('WY15 Deming')), size=0.8) +
+                                  geom_line(data=df_other_models,    aes(x=magnitude, y=srl_l10_ds,      linetype=as.factor('Existing'), color=as.factor('L10 DS')),      size=0.8) +
+                                  geom_line(data=df_other_models,    aes(x=magnitude, y=srl_l10_ss,      linetype=as.factor('Existing'), color=as.factor('L10 SS')),      size=0.8) +
+                                  geom_line(data=df_other_models,    aes(x=magnitude, y=srl_l10_src,     linetype=as.factor('Existing'), color=as.factor('L10 SRC')),     size=0.8) +
+                                  geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_fxd_d1, linetype=as.factor('Model 1 (Fixed slope)')), size=0.8) +
+                                  geom_line(data=df_predict_srl_mag, aes(x=magnitude, y=srl1m_fxd_d2, linetype=as.factor('Model 1 (Fixed slope)')), size=0.8) +
+                                  scale_y_log10(breaks=trans_breaks("log10", function(x) 10^x),  labels=trans_format("log10", math_format(10^.x)) ) +
+                                  scale_linetype_manual(values=c("dashed", "solid"))+
+                                  annotation_logticks(sides = "l") + labs(x='Magnitude', y='Surface Rupture Length (km)', color=NULL, linetype='Models') +
+                                  guides(colour = guide_legend(order = 2), linetype = guide_legend(order = 1)) +
+                                  theme(plot.title=element_text(size=size_title),  axis.title=element_text(size=size_title), 
+                                        axis.text.y=element_text(size=size_text),  axis.text.x=element_text(size=size_text),
+                                        legend.title=element_text(size=size_text), legend.text=element_text(size=size_text))
 
-ggsave(file.path(dir_fig,'model1_srl_mag_cmp_existing_models.png'),  plot=pl_model_cmp_m1, device='png', width=6.2, height=4)
+pl_model_cmp_m1_fxd
+
+ggsave(file.path(dir_fig,'model1_fxd_srl_mag_cmp_existing_models.png'),  plot=pl_model_cmp_m1_fxd, device='png', width=6.2, height=4)
 ```
-
 
 ## Acknowledgements
 
-* Alexandra Sarmiento (discussions & comments)
-* Stephane Baize (data)
-
+-   Alexandra Sarmiento (discussions & comments)
+-   Stephane Baize (data)
 
 ## References
 
@@ -1045,11 +1310,11 @@ Leonard, M. (2010). Earthquake fault scaling: Self-consistent relating of ruptur
 
 Romanowicz, B. (1992). Strike‐slip earthquakes on quasi‐vertical transcurrent faults: Inferences for general scaling relations. Geophysical Research Letters, 19(5), 481-484.
 
-Romanowicz, B. (1994). Comment on “A reappraisal of large earthquake scaling” by C. Scholz. Bulletin of the Seismological Society of America, 84(5), 1675-1676.
+Romanowicz, B. (1994). Comment on "A reappraisal of large earthquake scaling" by C. Scholz. Bulletin of the Seismological Society of America, 84(5), 1675-1676.
 
 Romanowicz, B., & Rundle, J. B. (1993). On scaling relations for large earthquakes. Bulletin of the Seismological Society of America, 83(4), 1294-1297.
 
-Pegler, G., & Das, S. (1996). Analysis of the relationship between seismic moment and fault length for large crustal strike‐slip earthquakes between 1977–92. Geophysical research letters, 23(9), 905-908.
+Pegler, G., & Das, S. (1996). Analysis of the relationship between seismic moment and fault length for large crustal strike‐slip earthquakes between 1977--92. Geophysical research letters, 23(9), 905-908.
 
 Scholz, C. H. (1982). Scaling laws for large earthquakes: consequences for physical models. Bulletin of the Seismological Society of America, 72(1), 1-14.
 
@@ -1063,4 +1328,4 @@ Wang, Y., & Goulet, C. (2021). Validation of fault displacements from dynamic ru
 
 Wells, D. L., & Coppersmith, K. J. (1994). New empirical relationships among magnitude, rupture length, rupture width, rupture area, and surface displacement. Bulletin of the seismological Society of America, 84(4), 974-1002.
 
-Wells, D. L., & Youngs R. B.  (2015). Improved Regression Relations for Earthquake Source Parameters. Seismological Society of America 2015 Annual Meeting
+Wells, D. L., & Youngs R. B. (2015). Improved Regression Relations for Earthquake Source Parameters. Seismological Society of America 2015 Annual Meeting

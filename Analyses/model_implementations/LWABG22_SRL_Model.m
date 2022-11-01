@@ -6,12 +6,12 @@ function [srl, srl_med, tau_srl] = LWABG22_SRL_Model(mag, wrup_max, F_D, eps)
 %--------------------
 %width model
 b_1=-1.1602; 
-b_2= 0.0325;
+b_2= 0.3396;
 %srl model
-c_1   =-3.6913;
-c_2   = 0.9205;
-c_3   =-0.1567;
-tau_u = 0.2568;
+c_1   =-4.16733;
+c_2   = 1.0;
+c_3   =-0.1207;
+tau_u = 0.2537;
 
 %Default inputs
 %--------------------

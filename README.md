@@ -5,4 +5,4 @@ The `Analyses` folder contains the regression scripts and model implementations,
 The model results, figures, and conclusions can be reproduced by executing the `Analyses\DevelopLWABC22SRLModel.Rmd` R Markdown notebook:<br>
 `Rscript -e "rmarkdown::render('Analyses\DevelopLWABC22SRLModel.Rmd')"`
 
-The folder `Analyses\model_implementations` contains an implementation of the porposed model in MATLAB.
+The folder `Analyses\model_implementations` contains an implementation of the proposed model in MATLAB and python.

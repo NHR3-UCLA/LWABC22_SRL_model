@@ -1,136 +1,136 @@
-"FLT_ID","EQ_ID","eq_name","eq_date","region","magnitude","style","sof","flag_missing","flag_multiple","event_len","seis_depth","dip"
-1,1,"Landers",1992,"California",7.28,"Strike-Slip",0,0,0,76.5206044184,15,90
-1,2,"HectorMine",1999,"California",7.13,"Strike-Slip",0,0,0,48.3473019184362,15,90
-1,3,"EMC",2010,"Mexico",7.2,"Normal-Oblique",-0.5,0,0,53.5706517929582,15,60
-1,4,"Balochistan",2013,"Pakistan",7.7,"Strike-Slip",0,0,0,208.164736879871,30,90
-1,5,"Izmit_Kocaeli",1999,"Turkey",7.51,"Strike-Slip",0,0,0,121.752675879931,22,90
-1,6,"Borrego",1968,"California",6.63,"Strike-Slip",0,0,0,31.4887498599097,15,90
-1,7,"Imperial1979",1979,"California",6.53,"Strike-Slip",0,0,0,32.6591587704202,15,90
-1,8,"SuperstitionHills",1987,"California",6.54,"Strike-Slip",0,0,0,27.5138443951369,15,90
-1,9,"Kobe",1995,"Japan",6.9,"Strike-Slip",0,1,0,10.1015874217529,17,90
-1,10,"Denali",2002,"Alaska",7.9,"Strike-Slip",0,0,0,278.697907495212,22,90
-1,11,"Duzce",1999,"Turkey",7.14,"Strike-Slip",0,0,0,39.9321913911659,22,90
-1,12,"Wenchuan",2008,"China",7.9,"Reverse-Oblique",0.5,0,0,224.508308016348,22,45
-1,13,"Napa",2014,"California",6,"Strike-Slip",0,0,0,21.309573069101,15,90
-1,14,"Yushu",2010,"China",6.9,"Strike-Slip",0,0,1,68.0570117302111,22,90
-1,15,"Hualien",2018,"Taiwan",6.4,"Strike-Slip",0,1,0,7.33019174398464,21,90
-1,16,"ChiChi",1999,"Taiwan",7.62,"Reverse-Oblique",0.5,0,0,81.7126323677209,21,45
-1,17,"Kumamoto",2016,"Japan",7,"Strike-Slip",0,0,0,31.4593864589541,17,90
-1,18,"Nagano",2014,"Japan",6.2,"Reverse",1,0,0,8.20810537623532,17,45
-1,19,"Kashmir",2005,"Sub-Himalaya",7.6,"Reverse",1,0,0,71.4454121841197,30,45
-1,20,"Kaikoura",2016,"New Zealand",7.8,"Reverse-Oblique",0.5,0,0,163.522200249025,15,45
-1,21,"Darfield",2010,"New Zealand",7,"Strike-Slip",0,0,0,29.4381316973,15,90
-1,22,"Parkfield2004",2004,"California",6,"Strike-Slip",0,0,0,32.4018922961161,15,90
-1,23,"Norcia3",2016,"Italy",6.6,"Normal",-1,0,0,28.9437662731972,22,60
-1,24,"Hebgen",1959,"Montana",7.3,"Normal",-1,0,0,25.2390080092417,22,60
-1,25,"SanFernando",1971,"California",6.61,"Reverse",1,0,0,18.2590001095338,15,45
-1,26,"Bohol",2013,"Philippines",7.1,"Reverse",1,1,0,48.2670998220267,22,45
-1,27,"Acambay",1912,"Mexico",6.9,"Normal-Oblique",-0.5,0,0,39.3361954092149,15,60
-1,28,"Imperial1940",1940,"California",6.95,"Strike-Slip",0,0,0,60.614554686305,15,90
-1,29,"Parkfield1966",1966,"California",6.19,"Strike-Slip",0,0,0,37.8128861253286,15,90
-1,30,"FairviewPeak",1954,"Nevada",7.3,"Normal-Oblique",-0.5,0,0,47.6384536215783,22,60
-1,31,"DixieValley",1954,"Nevada",6.9,"Normal",-1,0,0,37.8276836708664,22,60
-1,32,"GalwayLake",1975,"California",5.2,"Strike-Slip",0,0,0,6.90014730424626,15,90
-1,33,"Sonora",1887,"Mexico",7.6,"Normal-Oblique",-0.5,0,0,102.454562295142,15,60
-1,34,"PleasantValley",1915,"Nevada",7.2,"Normal",-1,0,0,61.1722015219671,22,60
-1,35,"Kern",1952,"California",7.36,"Reverse",1,0,0,29.493431230917,15,45
-1,36,"ChalfantValley",1986,"California",6.19,"Strike-Slip",0,0,0,14.2120681469395,15,90
-1,37,"Zirkuh",1997,"Iran",7.2,"Strike-Slip",0,0,0,120.547468962823,30,90
-1,38,"Petermann",2016,"Australia",6,"Reverse",1,0,0,18.7357996586559,40,45
-1,39,"OwensValley",1872,"California",7.4,"Normal-Oblique",-0.5,0,0,107.256106152373,15,60
-1,40,"LagunaSalada",1892,"Mexico",7.76,"Normal-Oblique",-0.5,0,0,44.9529589099552,15,60
-1,41,"Iwaki2011",2011,"Japan",6.6,"Normal",-1,0,0,14.1987990771,17,60
-1,42,"Ridgecrest1",2019,"California",6.4,"Strike-Slip",0,0,0,14.0055457533864,15,90
-1,43,"Ridgecrest2",2019,"California",7.1,"Strike-Slip",0,0,0,42.4593910354361,15,90
-1,44,"ElAsnam",1980,"Algeria",7.3,"Reverse",1,0,0,33.5573402260795,22,45
-1,45,"Cadoux",1979,"Australia",6.1,"Reverse",1,0,0,14.2993839763785,40,45
-1,46,"Calingiri",1970,"Australia",5.03,"Reverse",1,0,0,3.27683647602417,40,45
-1,47,"MarryatCreek",1986,"Australia",5.7,"Reverse",1,0,0,13.0305888204089,40,45
-1,48,"Meckering",1968,"Australia",6.59,"Reverse",1,0,0,35.0901480440907,40,45
-1,49,"Pukatja",2012,"Australia",5.18,"Reverse",1,0,0,1.27739273726787,40,45
-1,50,"TennantCreek1",1988,"Australia",6.27,"Reverse",1,0,0,8.25658686647018,40,45
-1,51,"TennantCreek2",1988,"Australia",6.44,"Reverse",1,0,0,7.80124274551799,40,45
-1,52,"TennantCreek3",1988,"Australia",6.58,"Reverse",1,0,0,14.6220086017469,40,45
-1,53,"SanMiguel",1956,"Mexico",6.8,"Strike-Slip",0,0,0,17.1666718365651,15,90
-1,54,"Yutian",2014,"China",6.9,"Strike-Slip",0,0,0,30.733401208488,22,90
-1,55,"Luzon",1990,"Philippines",7.7,"Strike-Slip",0,0,0,117.747965187163,22,90
-1,56,"BorahPeak",1983,"Idaho",6.88,"Normal",-1,0,0,34.3528897863504,22,60
-1,57,"ElmoreRanch",1987,"California",6.22,"Strike-Slip",0,0,0,8.9005680482028,15,90
-1,58,"Pisayambo",2010,"Ecuador",5,"Strike-Slip",0,0,0,9.10259859328934,22,90
-1,59,"Rikuu",1896,"Japan",6.7,"Reverse",1,0,0,20.4417788391086,17,45
-1,60,"Mikawa",1945,"Japan",6.6,"Reverse",1,0,0,16.5742453096868,17,45
-1,61,"IzuPeninsula",1974,"Japan",6.5,"Strike-Slip",0,1,0,5.50135323436642,17,90
-1,62,"IzuOshima",1978,"Japan",6.6,"Strike-Slip",0,1,0,2.77122770371239,17,90
-1,63,"IwateInland",1998,"Japan",5.8,"Reverse",1,0,0,1.13613943716298,17,45
-1,64,"Edgecumbe",1987,"New Zealand",6.6,"Normal",-1,0,0,7.37158624359784,15,60
-1,65,"Neftegorsk",1995,"Russia",7,"Strike-Slip",0,0,0,38.4852707039488,22,90
-1,66,"ChonKemin",1911,"Kyrgyzstan",8.02,"Reverse",1,0,0,156.378895243653,30,45
-1,68,"LeTeil",2019,"France",4.9,"Reverse",1,0,0,4.8975369463759,22,45
-1,69,"Norcia1",2016,"Italy",6.2,"Normal",-1,0,0,5.91249886795896,22,60
-1,70,"HomesteadValley",1979,"California",5.2,"Strike-Slip",0,0,0,3.63007538575858,15,90
-1,71,"Palu",2018,"Indonesia",7.5,"Strike-Slip",0,0,0,167.026318108965,17,90
-1,72,"LAquila",2009,"Italy",6.3,"Normal",-1,0,0,6.09339978547995,22,60
-1,73,"Spitak",1988,"Armenia",6.77,"Reverse-Oblique",0.5,0,0,7.37216103307217,22,45
-1,74,"Killari",1993,"India",6.2,"Reverse",1,0,0,0.205957209193986,30,45
-1,75,"YeniceGonen",1953,"Turkey",7.3,"Strike-Slip",0,0,0,70.948809515138,22,90
-2,7,"San Francisco",1906,"California",7.9,"Strike-Slip",0,0,0,432,15,90
-2,10,"Kansu",1920,"China",8.02,"Strike-Slip",0,0,0,240,22,90
-2,15,"North Izu",1930,"Japan",6.89,"Reverse-Oblique",0.5,0,0,35,17,45
-2,17,"Kehetuohai",1931,"China",7.92,"Strike-Slip",0,0,0,180,22,90
-2,19,"Cedar Mountain",1932,"Nevada",6.83,"Strike-Slip",0,0,0,61,22,90
-2,32,"Ancash",1946,"Peru",7.28,"Strike-Slip",0,0,0,21,22,90
-2,40,"Damxung",1951,"China",7.67,"Normal",-1,0,0,90,22,60
-2,45,"Rainbow Mountain",1954,"Nevada",6.22,"Strike-Slip",0,0,0,18,22,90
-2,46,"Stillwater",1954,"Nevada",6.55,"Reverse-Oblique",0.5,0,0,34,22,45
-2,52,"Gobi-Altai",1957,"Mongolia",8.14,"Strike-Slip",0,0,0,283,22,90
-2,65,"Varto",1966,"Turkey",6.88,"Normal",-1,0,0,30,22,60
-2,67,"Mogod",1967,"Mongolia",7.03,"Normal",-1,0,0,40,22,60
-2,68,"Mudurna Valley",1967,"Turkey",7.34,"Normal-Oblique",-0.5,0,0,80,22,60
-2,69,"Dibra",1967,"Albania",6.75,"Normal-Oblique",-0.5,0,0,10,22,60
-2,73,"Dasht-e-Bayaz",1968,"Iran",7.23,"Reverse-Oblique",0.5,0,0,80,30,45
-2,76,"Alasehir Valley",1969,"Turkey",6.71,"Strike-Slip",0,0,0,32,22,90
-2,83,"Tonghai",1970,"China",7.26,"Normal",-1,0,0,48,22,60
-2,84,"Gediz",1970,"Turkey",7.18,"Strike-Slip",0,0,0,41,22,90
-2,87,"Bingol",1971,"Turkey",6.63,"Strike-Slip",0,0,0,38,22,90
-2,96,"Luhuo",1973,"China",7.47,"Strike-Slip",0,0,0,89,22,90
-2,109,"Oroville",1975,"California",6.01,"Strike-Slip",0,0,0,3.8,15,90
-2,111,"Lice",1975,"Turkey",6.55,"Normal-Oblique",-0.5,0,0,26,22,60
-2,112,"Motagua",1976,"Guatemala",7.63,"Strike-Slip",0,0,0,235,17,90
-2,121,"Caldiran",1976,"Turkey",7.23,"Strike-Slip",0,0,0,55,22,90
-2,128,"Bob-Tangol",1977,"Iran",5.89,"Reverse-Oblique",0.5,0,0,12,30,45
-2,131,"Thessaloniki",1978,"Greece",6.43,"Normal",-1,0,0,19.4,22,60
-2,135,"Tabas",1978,"Iran",7.39,"Strike-Slip",0,0,0,85,30,90
-2,141,"Coyote Lake",1979,"California",5.77,"Normal",-1,0,0,14.4,15,60
-2,145,"Kurizan",1979,"Iran",6.61,"Reverse-Oblique",0.5,0,0,17,30,45
-2,146,"Koli",1979,"Iran",7.17,"Strike-Slip",0,0,0,65,30,90
-2,148,"Greenville",1980,"California",5.82,"Strike-Slip",0,0,0,6.2,15,90
-2,157,"South Apennines",1980,"Italy",6.91,"Normal-Oblique",-0.5,0,0,38,22,60
-2,158,"Daofu",1981,"China",6.64,"Reverse",1,0,0,44,22,45
-2,161,"Corinth",1981,"Greece",6.31,"Strike-Slip",0,0,0,19,22,90
-2,163,"Golbaf",1981,"Iran",6.57,"Strike-Slip",0,0,0,15,30,90
-2,164,"Sirch",1981,"Iran",7.12,"Strike-Slip",0,0,0,65,30,90
-2,168,"Dhamer",1982,"North Yemen",6.34,"Normal",-1,0,0,15,22,60
-2,169,"Popayan",1983,"Columbia",5.66,"Reverse",1,0,0,1.3,22,45
-2,172,"Coalinga-Nunez",1983,"California",5.42,"Strike-Slip",0,0,0,3.3,15,90
-2,175,"Pasinier",1983,"Turkey",6.72,"Reverse",1,0,0,12,22,45
-2,177,"Guinea",1983,"West Africa",6.32,"Strike-Slip",0,0,0,9.4,22,90
-2,190,"Wuqai",1985,"China",6.89,"Strike-Slip",0,0,0,15,22,90
-2,192,"Constantine",1985,"Algeria",6,"Reverse-Oblique",0.5,0,0,3.8,22,45
-2,199,"Cuzco",1986,"Peru",5.22,"Reverse-Oblique",0.5,0,0,2.5,22,45
-2,201,"North Palm Springs",1986,"California",6.13,"Strike-Slip",0,0,0,9,15,90
-2,204,"Kalamata",1986,"Greece",5.93,"Reverse",1,0,0,15,22,45
-2,221,"Lancang-Gengma",1988,"China",7.13,"Normal",-1,0,0,35,22,60
-2,222,"Gengma-Yunnan",1988,"China",6.83,"Strike-Slip",0,0,0,15.6,22,90
-2,228,"Chenoua",1989,"Algeria",5.98,"Normal",-1,0,0,4,22,60
-2,229,"Ungava",1989,"Canada",5.98,"Reverse-Oblique",0.5,0,0,10,22,45
-2,232,"Rudbar-Tarom",1990,"Iran",7.41,"Reverse-Oblique",0.5,0,0,80,30,45
-2,244,"Eureka Valley",1993,"California",6.08,"Normal",-1,0,0,4.4,15,60
-3,1,"Colfiorito",1997,"Italy",5.8,"Normal",-1,0,0,2.5,22,60
-3,2,"Katanning",2008,"Australia",4.7,"Reverse",1,0,0,1.3,40,45
-3,3,"Ernabella",2012,"Australia",5.4,"Reverse",1,0,0,1.5,40,45
-3,4,"Parina",2016,"Peru",6,"Normal",-1,0,0,12,22,60
-3,5,"Amatrice",2016,"Italy",6,"Normal",-1,0,0,5.2,22,60
-3,6,"Etna",2018,"Italy",4.9,"Strike-Slip",0,0,0,8,22,90
-3,7,"Lake_Muir",2018,"Australia",5.3,"Reverse",1,0,0,8,40,45
-3,8,"Le Teil",2019,"France",4.9,"Reverse",1,0,0,5,22,45
-3,9,"Sparta",2020,"North Carolina",5.1,"Reverse",1,0,0,3,22,45
+FLT_ID,EQ_ID,eq_name,eq_date,region,magnitude,style,sof,flag_missing,flag_multiple,event_len,seis_depth,dip
+1,1,Landers,1992,California,7.28,Strike-Slip,0,0,0,76.5206044184,15,90
+1,2,HectorMine,1999,California,7.13,Strike-Slip,0,0,0,48.3473019184362,15,90
+1,3,EMC,2010,Mexico,7.2,Normal-Oblique,-0.5,0,0,53.5706517929582,15,60
+1,4,Balochistan,2013,Pakistan,7.7,Strike-Slip,0,0,0,208.164736879871,30,90
+1,5,Izmit_Kocaeli,1999,Turkey,7.51,Strike-Slip,0,0,0,121.752675879931,22,90
+1,6,Borrego,1968,California,6.63,Strike-Slip,0,0,0,31.4887498599097,15,90
+1,7,Imperial1979,1979,California,6.53,Strike-Slip,0,0,0,32.6591587704202,15,90
+1,8,SuperstitionHills,1987,California,6.54,Strike-Slip,0,0,0,27.5138443951369,15,90
+1,9,Kobe,1995,Japan,6.9,Strike-Slip,0,1,0,10.1015874217529,17,90
+1,10,Denali,2002,Alaska,7.9,Strike-Slip,0,0,0,278.697907495212,22,90
+1,11,Duzce,1999,Turkey,7.14,Strike-Slip,0,0,0,39.9321913911659,22,90
+1,12,Wenchuan,2008,China,7.9,Reverse-Oblique,0.5,0,0,224.508308016348,22,45
+1,13,Napa,2014,California,6,Strike-Slip,0,0,0,21.309573069101,15,90
+1,14,Yushu,2010,China,6.9,Strike-Slip,0,0,1,68.0570117302111,22,90
+1,15,Hualien,2018,Taiwan,6.4,Strike-Slip,0,1,0,7.33019174398464,21,90
+1,16,ChiChi,1999,Taiwan,7.62,Reverse-Oblique,0.5,0,0,81.7126323677209,21,45
+1,17,Kumamoto,2016,Japan,7,Strike-Slip,0,0,0,31.4593864589541,17,90
+1,18,Nagano,2014,Japan,6.2,Reverse,1,0,0,8.20810537623532,17,45
+1,19,Kashmir,2005,Sub-Himalaya,7.6,Reverse,1,0,0,71.4454121841197,30,45
+1,20,Kaikoura,2016,New Zealand,7.8,Reverse-Oblique,0.5,0,0,163.522200249025,15,45
+1,21,Darfield,2010,New Zealand,7,Strike-Slip,0,0,0,29.4381316973,15,90
+1,22,Parkfield2004,2004,California,6,Strike-Slip,0,0,0,32.4018922961161,15,90
+1,23,Norcia3,2016,Italy,6.6,Normal,-1,0,0,28.9437662731972,22,60
+1,24,Hebgen,1959,Montana,7.3,Normal,-1,0,0,25.2390080092417,22,60
+1,25,SanFernando,1971,California,6.61,Reverse,1,0,0,18.2590001095338,15,45
+1,26,Bohol,2013,Philippines,7.1,Reverse,1,1,0,48.2670998220267,22,45
+1,27,Acambay,1912,Mexico,6.9,Normal-Oblique,-0.5,0,0,39.3361954092149,15,60
+1,28,Imperial1940,1940,California,6.95,Strike-Slip,0,0,0,60.614554686305,15,90
+1,29,Parkfield1966,1966,California,6.19,Strike-Slip,0,0,0,37.8128861253286,15,90
+1,30,FairviewPeak,1954,Nevada,7.3,Normal-Oblique,-0.5,0,0,47.6384536215783,22,60
+1,31,DixieValley,1954,Nevada,6.9,Normal,-1,0,0,37.8276836708664,22,60
+1,32,GalwayLake,1975,California,5.2,Strike-Slip,0,0,0,6.90014730424626,15,90
+1,33,Sonora,1887,Mexico,7.6,Normal-Oblique,-0.5,0,0,102.454562295142,15,60
+1,34,PleasantValley,1915,Nevada,7.2,Normal,-1,0,0,61.1722015219671,22,60
+1,35,Kern,1952,California,7.36,Reverse,1,0,0,29.493431230917,15,45
+1,36,ChalfantValley,1986,California,6.19,Strike-Slip,0,0,0,14.2120681469395,15,90
+1,37,Zirkuh,1997,Iran,7.2,Strike-Slip,0,0,0,120.547468962823,30,90
+1,38,Petermann,2016,Australia,6,Reverse,1,0,0,18.7357996586559,40,45
+1,39,OwensValley,1872,California,7.4,Normal-Oblique,-0.5,0,0,107.256106152373,15,60
+1,40,LagunaSalada,1892,Mexico,7.76,Normal-Oblique,-0.5,0,0,44.9529589099552,15,60
+1,41,Iwaki2011,2011,Japan,6.6,Normal,-1,0,0,14.1987990771,17,60
+1,42,Ridgecrest1,2019,California,6.4,Strike-Slip,0,0,0,14.0055457533864,15,90
+1,43,Ridgecrest2,2019,California,7.1,Strike-Slip,0,0,0,42.4593910354361,15,90
+1,44,ElAsnam,1980,Algeria,7.3,Reverse,1,0,0,33.5573402260795,22,45
+1,45,Cadoux,1979,Australia,6.1,Reverse,1,0,0,14.2993839763785,40,45
+1,46,Calingiri,1970,Australia,5.03,Reverse,1,0,0,3.27683647602417,40,45
+1,47,MarryatCreek,1986,Australia,5.7,Reverse,1,0,0,13.0305888204089,40,45
+1,48,Meckering,1968,Australia,6.59,Reverse,1,0,0,35.0901480440907,40,45
+1,49,Pukatja,2012,Australia,5.18,Reverse,1,0,0,1.27739273726787,40,45
+1,50,TennantCreek1,1988,Australia,6.27,Reverse,1,0,0,8.25658686647018,40,45
+1,51,TennantCreek2,1988,Australia,6.44,Reverse,1,0,0,7.80124274551799,40,45
+1,52,TennantCreek3,1988,Australia,6.58,Reverse,1,0,0,14.6220086017469,40,45
+1,53,SanMiguel,1956,Mexico,6.8,Strike-Slip,0,0,0,17.1666718365651,15,90
+1,54,Yutian,2014,China,6.9,Strike-Slip,0,0,0,30.733401208488,22,90
+1,55,Luzon,1990,Philippines,7.7,Strike-Slip,0,0,0,117.747965187163,22,90
+1,56,BorahPeak,1983,Idaho,6.88,Normal,-1,0,0,34.3528897863504,22,60
+1,57,ElmoreRanch,1987,California,6.22,Strike-Slip,0,0,0,8.9005680482028,15,90
+1,58,Pisayambo,2010,Ecuador,5,Strike-Slip,0,0,0,9.10259859328934,22,90
+1,59,Rikuu,1896,Japan,6.7,Reverse,1,0,0,20.4417788391086,17,45
+1,60,Mikawa,1945,Japan,6.6,Reverse,1,0,0,16.5742453096868,17,45
+1,61,IzuPeninsula,1974,Japan,6.5,Strike-Slip,0,1,0,5.50135323436642,17,90
+1,62,IzuOshima,1978,Japan,6.6,Strike-Slip,0,1,0,2.77122770371239,17,90
+1,63,IwateInland,1998,Japan,5.8,Reverse,1,0,0,1.13613943716298,17,45
+1,64,Edgecumbe,1987,New Zealand,6.6,Normal,-1,0,0,7.37158624359784,15,60
+1,65,Neftegorsk,1995,Russia,7,Strike-Slip,0,0,0,38.4852707039488,22,90
+1,66,ChonKemin,1911,Kyrgyzstan,8.02,Reverse,1,0,0,156.378895243653,30,45
+1,68,LeTeil,2019,France,4.9,Reverse,1,0,0,4.8975369463759,22,45
+1,69,Norcia1,2016,Italy,6.2,Normal,-1,0,0,5.91249886795896,22,60
+1,70,HomesteadValley,1979,California,5.2,Strike-Slip,0,0,0,3.63007538575858,15,90
+1,71,Palu,2018,Indonesia,7.5,Strike-Slip,0,0,0,167.026318108965,17,90
+1,72,LAquila,2009,Italy,6.3,Normal,-1,0,0,6.09339978547995,22,60
+1,73,Spitak,1988,Armenia,6.77,Reverse-Oblique,0.5,0,0,7.37216103307217,22,45
+1,74,Killari,1993,India,6.2,Reverse,1,0,0,0.205957209193986,30,45
+1,75,YeniceGonen,1953,Turkey,7.3,Strike-Slip,0,0,0,70.948809515138,22,90
+2,7,San Francisco,1906,California,7.9,Strike-Slip,0,0,0,432,15,90
+2,10,Kansu,1920,China,8.02,Strike-Slip,0,0,0,240,22,90
+2,15,North Izu,1930,Japan,6.89,Reverse-Oblique,0.5,0,0,35,17,45
+2,17,Kehetuohai,1931,China,7.92,Strike-Slip,0,0,0,180,22,90
+2,19,Cedar Mountain,1932,Nevada,6.83,Strike-Slip,0,0,0,61,22,90
+2,32,Ancash,1946,Peru,7.28,Strike-Slip,0,0,0,21,22,90
+2,40,Damxung,1951,China,7.67,Normal,-1,0,0,90,22,60
+2,45,Rainbow Mountain,1954,Nevada,6.22,Strike-Slip,0,0,0,18,22,90
+2,46,Stillwater,1954,Nevada,6.55,Reverse-Oblique,0.5,0,0,34,22,45
+2,52,Gobi-Altai,1957,Mongolia,8.14,Strike-Slip,0,0,0,283,22,90
+2,65,Varto,1966,Turkey,6.88,Normal,-1,0,0,30,22,60
+2,67,Mogod,1967,Mongolia,7.03,Normal,-1,0,0,40,22,60
+2,68,Mudurna Valley,1967,Turkey,7.34,Normal-Oblique,-0.5,0,0,80,22,60
+2,69,Dibra,1967,Albania,6.75,Normal-Oblique,-0.5,0,0,10,22,60
+2,73,Dasht-e-Bayaz,1968,Iran,7.23,Reverse-Oblique,0.5,0,0,80,30,45
+2,76,Alasehir Valley,1969,Turkey,6.71,Strike-Slip,0,0,0,32,22,90
+2,83,Tonghai,1970,China,7.26,Normal,-1,0,0,48,22,60
+2,84,Gediz,1970,Turkey,7.18,Strike-Slip,0,0,0,41,22,90
+2,87,Bingol,1971,Turkey,6.63,Strike-Slip,0,0,0,38,22,90
+2,96,Luhuo,1973,China,7.47,Strike-Slip,0,0,0,89,22,90
+2,109,Oroville,1975,California,6.01,Strike-Slip,0,0,0,3.8,15,90
+2,111,Lice,1975,Turkey,6.55,Normal-Oblique,-0.5,0,0,26,22,60
+2,112,Motagua,1976,Guatemala,7.63,Strike-Slip,0,0,0,235,17,90
+2,121,Caldiran,1976,Turkey,7.23,Strike-Slip,0,0,0,55,22,90
+2,128,Bob-Tangol,1977,Iran,5.89,Reverse-Oblique,0.5,0,0,12,30,45
+2,131,Thessaloniki,1978,Greece,6.43,Normal,-1,0,0,19.4,22,60
+2,135,Tabas,1978,Iran,7.39,Strike-Slip,0,0,0,85,30,90
+2,141,Coyote Lake,1979,California,5.77,Normal,-1,0,0,14.4,15,60
+2,145,Kurizan,1979,Iran,6.61,Reverse-Oblique,0.5,0,0,17,30,45
+2,146,Koli,1979,Iran,7.17,Strike-Slip,0,0,0,65,30,90
+2,148,Greenville,1980,California,5.82,Strike-Slip,0,0,0,6.2,15,90
+2,157,South Apennines,1980,Italy,6.91,Normal-Oblique,-0.5,0,0,38,22,60
+2,158,Daofu,1981,China,6.64,Reverse,1,0,0,44,22,45
+2,161,Corinth,1981,Greece,6.31,Strike-Slip,0,0,0,19,22,90
+2,163,Golbaf,1981,Iran,6.57,Strike-Slip,0,0,0,15,30,90
+2,164,Sirch,1981,Iran,7.12,Strike-Slip,0,0,0,65,30,90
+2,168,Dhamer,1982,North Yemen,6.34,Normal,-1,0,0,15,22,60
+2,169,Popayan,1983,Columbia,5.66,Reverse,1,0,0,1.3,22,45
+2,172,Coalinga-Nunez,1983,California,5.42,Strike-Slip,0,0,0,3.3,15,90
+2,175,Pasinier,1983,Turkey,6.72,Reverse,1,0,0,12,22,45
+2,177,Guinea,1983,West Africa,6.32,Strike-Slip,0,0,0,9.4,22,90
+2,190,Wuqai,1985,China,6.89,Strike-Slip,0,0,0,15,22,90
+2,192,Constantine,1985,Algeria,6,Reverse-Oblique,0.5,0,0,3.8,22,45
+2,199,Cuzco,1986,Peru,5.22,Reverse-Oblique,0.5,0,0,2.5,22,45
+2,201,North Palm Springs,1986,California,6.13,Strike-Slip,0,0,0,9,15,90
+2,204,Kalamata,1986,Greece,5.93,Reverse,1,0,0,15,22,45
+2,221,Lancang-Gengma,1988,China,7.13,Normal,-1,0,0,35,22,60
+2,222,Gengma-Yunnan,1988,China,6.83,Strike-Slip,0,0,0,15.6,22,90
+2,228,Chenoua,1989,Algeria,5.98,Normal,-1,0,0,4,22,60
+2,229,Ungava,1989,Canada,5.98,Reverse-Oblique,0.5,0,0,10,22,45
+2,232,Rudbar-Tarom,1990,Iran,7.41,Reverse-Oblique,0.5,0,0,80,30,45
+2,244,Eureka Valley,1993,California,6.08,Normal,-1,0,0,4.4,15,60
+3,1,Colfiorito,1997,Italy,5.9,Normal,-1,0,0,2.5,22,60
+3,2,Katanning,2008,Australia,4.7,Reverse,1,0,0,1.3,40,45
+3,3,Ernabella,2012,Australia,5.4,Reverse,1,0,0,1.5,40,45
+3,4,Parina,2016,Peru,6.1,Normal,-1,0,0,12,22,60
+3,5,Amatrice,2016,Italy,6.2,Normal,-1,0,0,5.2,22,60
+3,6,Etna,2018,Italy,4.9,Strike-Slip,0,0,0,8,22,90
+3,7,Lake_Muir,2018,Australia,5.3,Reverse,1,0,0,3,40,45
+3,8,Le Teil,2019,France,4.9,Reverse,1,0,0,5,22,45
+3,9,Sparta,2020,North Carolina,5.1,Reverse,1,0,0,2,22,45
